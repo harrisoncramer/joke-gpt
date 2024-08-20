@@ -51,17 +51,6 @@ func quit(msg tea.Msg, keybinding key.Binding) tea.Cmd {
 	return nil
 }
 
-/* Navigates to the previous model */
-func back(msg tea.Msg, keybinding key.Binding) Quitter {
-	switch msg := msg.(type) {
-	case tea.KeyMsg:
-		if slices.Contains(keybinding.Keys(), msg.String()) {
-			return newFirstModel()
-		}
-	}
-	return nil
-}
-
 // FullHelp returns keybindings for the expanded help view. It's part of the
 // key.Map interface.
 func (k keyMap) FullHelp() [][]key.Binding {

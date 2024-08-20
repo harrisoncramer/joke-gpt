@@ -1,8 +1,11 @@
 package cmd
 
 import (
-	"errors"
+	"encoding/json"
 	"fmt"
+	"io"
+	"net/http"
+	"slices"
 
 	help "github.com/charmbracelet/bubbles/help"
 	tea "github.com/charmbracelet/bubbletea"
@@ -16,7 +19,7 @@ type SecondModel struct {
 }
 
 func newSecondModel() NestedView {
-	selector := newSelector(selectorOpts{url: "http://localhost:3000/options"})
+	selector := newSelector()
 	return SecondModel{
 		keys:     newKeys(),
 		selector: selector,
@@ -25,18 +28,13 @@ func newSecondModel() NestedView {
 }
 
 func (m SecondModel) Init() tea.Cmd {
-	return m.selector.getOptions
+	return m.getOptions
 }
 
 func (m SecondModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	quit := m.quit(msg)
 	if quit != nil {
 		return m, quit
-	}
-
-	back := m.back(msg)
-	if back != nil {
-		return back, nil
 	}
 
 	switch msg := msg.(type) {
@@ -48,10 +46,11 @@ func (m SecondModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.selector.options = msg.options
 	case move:
 		m.selector.move(msg)
-	case selectedEntry:
-		m.err = errors.New("Chosen!")
-		return m, nil
 	case tea.KeyMsg:
+		if slices.Contains(m.keys.Back.Keys(), msg.String()) {
+			firstModel := newFirstModel()
+			return firstModel, firstModel.Init()
+		}
 		return m, m.selector.Input(msg)
 	}
 
@@ -63,7 +62,7 @@ func (m SecondModel) View() string {
 		return m.err.Error()
 	}
 
-	base := ""
+	base := "Second View\n"
 	base += m.selector.Render()
 	base += fmt.Sprintf("\n%s", m.help.View(m.keys))
 
@@ -75,5 +74,31 @@ func (m SecondModel) quit(msg tea.Msg) tea.Cmd {
 }
 
 func (m SecondModel) back(msg tea.Msg) Quitter {
-	return back(msg, m.keys.Back)
+	return newFirstModel()
+}
+
+func (m SecondModel) getOptions() tea.Msg {
+	c := &http.Client{Timeout: pluginOpts.Network.TimeoutMillis}
+	res, err := c.Get("http://localhost:3000/options")
+
+	if err != nil {
+		return errMsg{err}
+	}
+
+	defer res.Body.Close()
+
+	data, err := io.ReadAll(res.Body)
+	if err != nil {
+		return errMsg{err}
+	}
+
+	var optionsResponse []Option
+	err = json.Unmarshal(data, &optionsResponse)
+	if err != nil {
+		return errMsg{err}
+	}
+
+	return optionsMsg{
+		options: optionsResponse,
+	}
 }

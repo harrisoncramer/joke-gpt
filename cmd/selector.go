@@ -1,25 +1,14 @@
 package cmd
 
 import (
-	"encoding/json"
 	"fmt"
-	"io"
-	"net/http"
 	"slices"
 	"strings"
-	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-type selectorOpts struct {
-	url     string
-	timeout time.Duration
-}
-
 type Selector struct {
-	opts    selectorOpts
-	url     string
 	keys    keyMap
 	cursor  int
 	options []Option
@@ -36,19 +25,16 @@ type move struct {
 	direction Direction
 }
 
-type selectedEntry struct{}
+type selectedEntry struct {
+	value string
+}
 
-func newSelector(opts selectorOpts) Selector {
-
-	if opts.timeout == 0 {
-		opts.timeout = pluginOpts.Network.TimeoutMillis
-	}
+func newSelector() Selector {
 
 	keys := newKeys()
 
 	m := Selector{
 		cursor: 0,
-		opts:   opts,
 		keys: keyMap{
 			Select: keys.Select,
 			Up:     keys.Up,
@@ -93,7 +79,7 @@ func (s Selector) Input(msg tea.KeyMsg) tea.Cmd {
 			return move{direction: Up}
 		}
 		if slices.Contains(s.keys.Select.Keys(), str) {
-			return selectedEntry{}
+			return selectedEntry{value: s.options[s.cursor].Value}
 		}
 		return nil
 	}
@@ -108,30 +94,4 @@ type OptionsResponse []Option
 
 type optionsMsg struct {
 	options []Option
-}
-
-func (s Selector) getOptions() tea.Msg {
-	c := &http.Client{Timeout: s.opts.timeout}
-	res, err := c.Get(s.opts.url)
-
-	if err != nil {
-		return errMsg{err}
-	}
-
-	defer res.Body.Close()
-
-	data, err := io.ReadAll(res.Body)
-	if err != nil {
-		return errMsg{err}
-	}
-
-	var optionsResponse []Option
-	err = json.Unmarshal(data, &optionsResponse)
-	if err != nil {
-		return errMsg{err}
-	}
-
-	return optionsMsg{
-		options: optionsResponse,
-	}
 }
