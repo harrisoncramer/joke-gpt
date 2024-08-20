@@ -16,7 +16,7 @@ type MainModel struct {
 
 func newFirstModel() tea.Model {
 	return MainModel{
-		keys:     newKeys(),
+		keys:     newKeys(false),
 		help:     help.New(),
 		selector: newSelector(),
 	}

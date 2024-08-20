@@ -15,15 +15,11 @@ type keyMap struct {
 	Down   key.Binding
 }
 
-func newKeys() keyMap {
-	return keyMap{
+func newKeys(isNested bool) keyMap {
+	k := keyMap{
 		Quit: key.NewBinding(
 			key.WithKeys(pluginOpts.Keys.Quit),
 			key.WithHelp(pluginOpts.Keys.Quit, "quit"),
-		),
-		Back: key.NewBinding(
-			key.WithKeys(pluginOpts.Keys.Back),
-			key.WithHelp(pluginOpts.Keys.Back, "back"),
 		),
 		Select: key.NewBinding(
 			key.WithKeys(pluginOpts.Keys.Select),
@@ -38,6 +34,15 @@ func newKeys() keyMap {
 			key.WithHelp(pluginOpts.Keys.Down, "down"),
 		),
 	}
+
+	if isNested {
+		k.Back = key.NewBinding(
+			key.WithKeys(pluginOpts.Keys.Back),
+			key.WithHelp(pluginOpts.Keys.Back, "back"),
+		)
+	}
+
+	return k
 }
 
 /* Handles quitting the application when certain keys are pressed */

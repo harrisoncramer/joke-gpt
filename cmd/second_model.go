@@ -19,7 +19,7 @@ type SecondModel struct {
 
 func newSecondModel() NestedView {
 	return SecondModel{
-		keys:     newKeys(),
+		keys:     newKeys(true),
 		selector: newSelector(),
 		help:     help.New(),
 	}

@@ -2,14 +2,12 @@ package cmd
 
 import (
 	"fmt"
-	"slices"
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
 )
 
 type Selector struct {
-	keys    keyMap
 	cursor  int
 	options []Option
 }
@@ -30,16 +28,8 @@ type selectMsg struct {
 }
 
 func newSelector() Selector {
-
-	keys := newKeys()
-
 	m := Selector{
 		cursor: 0,
-		keys: keyMap{
-			Select: keys.Select,
-			Up:     keys.Up,
-			Down:   keys.Down,
-		},
 	}
 
 	return m
@@ -72,13 +62,13 @@ func (s Selector) Render() string {
 func (s Selector) Input(msg tea.KeyMsg) tea.Cmd {
 	return func() tea.Msg {
 		str := msg.String()
-		if slices.Contains(s.keys.Down.Keys(), str) {
+		if pluginOpts.Keys.Down == str {
 			return moveMsg{direction: Down}
 		}
-		if slices.Contains(s.keys.Up.Keys(), str) {
+		if pluginOpts.Keys.Up == str {
 			return moveMsg{direction: Up}
 		}
-		if slices.Contains(s.keys.Select.Keys(), str) {
+		if pluginOpts.Keys.Select == str {
 			return selectMsg{value: s.options[s.cursor].Value}
 		}
 		return nil
