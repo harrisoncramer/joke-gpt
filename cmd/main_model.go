@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 	"slices"
-	"time"
 
 	help "github.com/charmbracelet/bubbles/help"
 	tea "github.com/charmbracelet/bubbletea"
@@ -14,18 +13,7 @@ type MainModel struct {
 	help help.Model
 }
 
-type TuiOptions struct {
-	cursorIcon    string
-	globalTimeout time.Duration
-}
-
-var tuiOptions = TuiOptions{
-	cursorIcon:    ">",
-	globalTimeout: time.Second * 2,
-}
-
 func newFirstModel() Quitter {
-
 	m := MainModel{
 		keys: keyMap{
 			Quit:   quitKeys,

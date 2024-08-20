@@ -41,7 +41,7 @@ type selectedEntry struct{}
 func newSelector(opts selectorOpts) Selector {
 
 	if opts.timeout == 0 {
-		opts.timeout = tuiOptions.globalTimeout
+		opts.timeout = pluginOpts.Network.Timeout
 	}
 
 	m := Selector{
@@ -73,9 +73,9 @@ func (s Selector) Render() string {
 	base := ""
 	for i, option := range s.options {
 		if i == s.cursor {
-			base += fmt.Sprintf("%s %s\n", tuiOptions.cursorIcon, option.Label)
+			base += fmt.Sprintf("%s %s\n", pluginOpts.Display.Cursor, option.Label)
 		} else {
-			base += fmt.Sprintf("%s %s\n", strings.Repeat(" ", len(tuiOptions.cursorIcon)), option.Label)
+			base += fmt.Sprintf("%s %s\n", strings.Repeat(" ", len(pluginOpts.Display.Cursor)), option.Label)
 		}
 	}
 	return base
