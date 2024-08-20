@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"os"
 	"time"
 
@@ -9,6 +10,7 @@ import (
 )
 
 type CliOpts struct {
+	Token   string      `yaml:"token"`
 	Network NetworkOpts `yaml:"network"`
 	Display DisplayOpts `yaml:"display"`
 	Keys    KeyOpts     `yaml:"keys"`
@@ -66,6 +68,19 @@ func initializeConfig(cmd *cobra.Command) error {
 	}
 	if pluginOpts.Keys.Back == "" {
 		pluginOpts.Keys.Back = "esc"
+	}
+
+	flagToken, err := cmd.Flags().GetString("token")
+	if err != nil {
+		return err
+	}
+	if flagToken == "" && pluginOpts.Token == "" {
+		return errors.New("An API token is required, use --token or provide one in your configuration file!\n")
+	}
+
+	/* The flag will override the config file if present */
+	if flagToken != "" {
+		pluginOpts.Token = flagToken
 	}
 
 	pluginOpts.Network.TimeoutMillis = time.Duration(pluginOpts.Network.Timeout) * time.Millisecond

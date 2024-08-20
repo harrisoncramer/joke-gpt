@@ -11,9 +11,8 @@ import (
 
 /* The init() function is called automatically by Go */
 func init() {
-	rootCmd.PersistentFlags().StringP("token", "t", "", "Token used to authenticate to the Shortcut API")
+	rootCmd.PersistentFlags().StringP("token", "t", "", "Token for the Shortcut API. This value will override a `token` set in your config file")
 	rootCmd.PersistentFlags().StringP("config", "", "", "The path to a .yaml configuration file")
-	rootCmd.MarkPersistentFlagRequired("token")
 }
 
 var rootCmd = &cobra.Command{
