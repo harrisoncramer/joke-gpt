@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"slices"
@@ -56,7 +56,7 @@ func back(msg tea.Msg, keybinding key.Binding) Quitter {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		if slices.Contains(keybinding.Keys(), msg.String()) {
-			return newFirstModel()
+			return NewFirstModel()
 		}
 	}
 	return nil
@@ -79,7 +79,3 @@ func (k keyMap) ShortHelp() []key.Binding {
 		k.Down,
 	}
 }
-
-type errMsg struct{ err error }
-
-func (e errMsg) Error() string { return e.err.Error() }

@@ -1,8 +1,9 @@
-package main
+package cmd
 
 import (
 	"fmt"
 	"slices"
+	"time"
 
 	help "github.com/charmbracelet/bubbles/help"
 	tea "github.com/charmbracelet/bubbletea"
@@ -13,7 +14,18 @@ type MainModel struct {
 	help help.Model
 }
 
-func newFirstModel() Quitter {
+type TuiOptions struct {
+	cursorIcon    string
+	globalTimeout time.Duration
+}
+
+var tuiOptions = TuiOptions{
+	cursorIcon:    ">",
+	globalTimeout: time.Second * 2,
+}
+
+func NewFirstModel() Quitter {
+
 	m := MainModel{
 		keys: keyMap{
 			Quit:   quitKeys,

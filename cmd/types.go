@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import tea "github.com/charmbracelet/bubbletea"
 
@@ -12,3 +12,7 @@ type NestedView interface {
 	Quitter
 	back(msg tea.Msg) Quitter
 }
+
+type errMsg struct{ err error }
+
+func (e errMsg) Error() string { return e.err.Error() }

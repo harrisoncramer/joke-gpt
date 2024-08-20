@@ -3,23 +3,13 @@ package main
 import (
 	"fmt"
 	"os"
-	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
+	cmd "github.com/harrisoncramer/nested-models/cmd"
 )
 
-type TuiOptions struct {
-	cursorIcon    string
-	globalTimeout time.Duration
-}
-
-var tuiOptions = TuiOptions{
-	cursorIcon:    ">",
-	globalTimeout: time.Second * 2,
-}
-
 func main() {
-	m := newFirstModel()
+	m := cmd.NewFirstModel()
 	p := tea.NewProgram(m)
 	if _, err := p.Run(); err != nil {
 		fmt.Printf("There's been an error: %v", err)
