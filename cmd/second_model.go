@@ -18,13 +18,7 @@ type SecondModel struct {
 func newSecondModel() NestedView {
 	selector := newSelector(selectorOpts{url: "http://localhost:3000/options"})
 	return SecondModel{
-		keys: keyMap{
-			Quit:   quitKeys,
-			Back:   backKeys,
-			Up:     selector.keys.Up,
-			Down:   selector.keys.Down,
-			Select: selector.keys.Select,
-		},
+		keys:     newKeys(),
 		selector: selector,
 		help:     help.New(),
 	}

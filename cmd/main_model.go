@@ -14,11 +14,9 @@ type MainModel struct {
 }
 
 func newFirstModel() Quitter {
+	allKeys := newKeys()
 	m := MainModel{
-		keys: keyMap{
-			Quit:   quitKeys,
-			Select: selectKeys,
-		},
+		keys: allKeys,
 		help: help.New(),
 	}
 	return m

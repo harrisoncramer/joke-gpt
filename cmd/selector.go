@@ -41,16 +41,18 @@ type selectedEntry struct{}
 func newSelector(opts selectorOpts) Selector {
 
 	if opts.timeout == 0 {
-		opts.timeout = pluginOpts.Network.Timeout
+		opts.timeout = pluginOpts.Network.TimeoutMillis
 	}
+
+	keys := newKeys()
 
 	m := Selector{
 		cursor: 0,
 		opts:   opts,
 		keys: keyMap{
-			Select: selectKeys,
-			Up:     upKeys,
-			Down:   downKeys,
+			Select: keys.Select,
+			Up:     keys.Up,
+			Down:   keys.Down,
 		},
 	}
 

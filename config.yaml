@@ -1,0 +1,4 @@
+display:
+  cursor: ">>"
+network:
+  timeout: 1000

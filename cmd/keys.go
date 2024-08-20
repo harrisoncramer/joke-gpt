@@ -15,30 +15,30 @@ type keyMap struct {
 	Down   key.Binding
 }
 
-var quitKeys = key.NewBinding(
-	key.WithKeys(tea.KeyCtrlC.String()),
-	key.WithHelp("ctrl+c", "quit"),
-)
-
-var selectKeys = key.NewBinding(
-	key.WithKeys(tea.KeyEnter.String()),
-	key.WithHelp("enter", "select"),
-)
-
-var backKeys = key.NewBinding(
-	key.WithKeys(tea.KeyEsc.String()),
-	key.WithHelp("esc", "back"),
-)
-
-var upKeys = key.NewBinding(
-	key.WithKeys("k"),
-	key.WithHelp("k", "up"),
-)
-
-var downKeys = key.NewBinding(
-	key.WithKeys("j"),
-	key.WithHelp("j", "down"),
-)
+func newKeys() keyMap {
+	return keyMap{
+		Quit: key.NewBinding(
+			key.WithKeys(pluginOpts.Keys.Quit),
+			key.WithHelp(pluginOpts.Keys.Quit, "quit"),
+		),
+		Back: key.NewBinding(
+			key.WithKeys(pluginOpts.Keys.Back),
+			key.WithHelp(pluginOpts.Keys.Back, "back"),
+		),
+		Select: key.NewBinding(
+			key.WithKeys(pluginOpts.Keys.Select),
+			key.WithHelp(pluginOpts.Keys.Select, "select"),
+		),
+		Up: key.NewBinding(
+			key.WithKeys(pluginOpts.Keys.Up),
+			key.WithHelp(pluginOpts.Keys.Up, "up"),
+		),
+		Down: key.NewBinding(
+			key.WithKeys(pluginOpts.Keys.Down),
+			key.WithHelp(pluginOpts.Keys.Down, "down"),
+		),
+	}
+}
 
 /* Handles quitting the application when certain keys are pressed */
 func quit(msg tea.Msg, keybinding key.Binding) tea.Cmd {

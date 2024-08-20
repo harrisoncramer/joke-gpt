@@ -20,11 +20,15 @@ var rootCmd = &cobra.Command{
 	Use:   "sh",
 	Short: "A TUI for interacting with Shortcut from the command line",
 	Run: func(cmd *cobra.Command, args []string) {
-		initializeConfig(cmd)
+		err := initializeConfig(cmd)
+		if err != nil {
+			fmt.Printf("Error parsing configuration: %v", err)
+			os.Exit(1)
+		}
 		m := newFirstModel()
 		p := tea.NewProgram(m)
 		if _, err := p.Run(); err != nil {
-			fmt.Printf("There's been an error: %v", err)
+			fmt.Printf("Error starting BubbleTea: %v", err)
 			os.Exit(1)
 		}
 	},
