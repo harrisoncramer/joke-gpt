@@ -24,7 +24,7 @@ var tuiOptions = TuiOptions{
 	globalTimeout: time.Second * 2,
 }
 
-func NewFirstModel() Quitter {
+func newFirstModel() Quitter {
 
 	m := MainModel{
 		keys: keyMap{

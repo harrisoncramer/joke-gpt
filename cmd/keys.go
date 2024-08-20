@@ -56,7 +56,7 @@ func back(msg tea.Msg, keybinding key.Binding) Quitter {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		if slices.Contains(keybinding.Keys(), msg.String()) {
-			return NewFirstModel()
+			return newFirstModel()
 		}
 	}
 	return nil
