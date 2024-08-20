@@ -2,7 +2,13 @@ package main
 
 import tea "github.com/charmbracelet/bubbletea"
 
-type QuittableModel interface {
+type Quitter interface {
 	tea.Model
-	handleExitKeys(msg tea.KeyMsg) tea.Cmd
+	quit(msg tea.Msg) tea.Cmd
+}
+
+type NestedView interface {
+	tea.Model
+	Quitter
+	back(msg tea.Msg) Quitter
 }

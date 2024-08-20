@@ -8,15 +8,10 @@ import (
 )
 
 func main() {
-	m := initModel()
+	m := newFirstModel()
 	p := tea.NewProgram(m)
 	if _, err := p.Run(); err != nil {
 		fmt.Printf("There's been an error: %v", err)
 		os.Exit(1)
 	}
-}
-
-func initModel() QuittableModel {
-	m := MainModel{}
-	return m
 }
