@@ -1,13 +1,26 @@
 package main
 
-import tea "github.com/charmbracelet/bubbletea"
+import (
+	"fmt"
 
-func newFirstModel() Quitter {
-	m := MainModel{}
-	return m
+	help "github.com/charmbracelet/bubbles/help"
+	tea "github.com/charmbracelet/bubbletea"
+)
+
+type MainModel struct {
+	keys keyMap
+	help help.Model
 }
 
-type MainModel struct{}
+func newFirstModel() Quitter {
+	m := MainModel{
+		keys: keyMap{
+			Quit: quitKey,
+		},
+		help: help.New(),
+	}
+	return m
+}
 
 func (m MainModel) Init() tea.Cmd {
 	return nil
@@ -30,9 +43,12 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m MainModel) View() string {
-	return "Hello there"
+	base := "Main View"
+	helpView := m.help.View(m.keys)
+	base += fmt.Sprintf("\n\n%s", helpView)
+	return base
 }
 
 func (m MainModel) quit(msg tea.Msg) tea.Cmd {
-	return quit(msg)
+	return quit(msg, m.keys)
 }
