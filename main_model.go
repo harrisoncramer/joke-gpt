@@ -15,7 +15,8 @@ type MainModel struct {
 func newFirstModel() Quitter {
 	m := MainModel{
 		keys: keyMap{
-			Quit: quitKey,
+			Quit:   quitKeys,
+			Select: selectKeys,
 		},
 		help: help.New(),
 	}
@@ -36,7 +37,8 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "enter":
-			return newSecondModel().Update(msg)
+			secondModel := newSecondModel()
+			return secondModel, secondModel.Init()
 		}
 	}
 	return m, nil
@@ -50,5 +52,5 @@ func (m MainModel) View() string {
 }
 
 func (m MainModel) quit(msg tea.Msg) tea.Cmd {
-	return quit(msg, m.keys)
+	return quit(msg, m.keys.Quit)
 }

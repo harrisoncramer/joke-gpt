@@ -8,28 +8,43 @@ import (
 )
 
 type keyMap struct {
-	Quit key.Binding
-	Back key.Binding
+	Quit   key.Binding
+	Back   key.Binding
+	Select key.Binding
+	Up     key.Binding
+	Down   key.Binding
 }
 
-var quitKey = key.NewBinding(
-	key.WithKeys(
-		tea.KeyCtrlC.String(),
-		tea.KeyCtrlD.String(),
-	),
-	key.WithHelp("ctrl+c/ctrl+d", "quit"),
+var quitKeys = key.NewBinding(
+	key.WithKeys(tea.KeyCtrlC.String()),
+	key.WithHelp("ctrl+c", "quit"),
 )
 
-var backKey = key.NewBinding(
+var selectKeys = key.NewBinding(
+	key.WithKeys(tea.KeyEnter.String()),
+	key.WithHelp("enter", "select"),
+)
+
+var backKeys = key.NewBinding(
 	key.WithKeys(tea.KeyEsc.String()),
 	key.WithHelp("esc", "back"),
 )
 
+var upKeys = key.NewBinding(
+	key.WithKeys("k"),
+	key.WithHelp("k", "up"),
+)
+
+var downKeys = key.NewBinding(
+	key.WithKeys("j"),
+	key.WithHelp("j", "down"),
+)
+
 /* Handles quitting the application when certain keys are pressed */
-func quit(msg tea.Msg, keys keyMap) tea.Cmd {
+func quit(msg tea.Msg, keybinding key.Binding) tea.Cmd {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
-		if slices.Contains(keys.Quit.Keys(), msg.String()) {
+		if slices.Contains(keybinding.Keys(), msg.String()) {
 			return tea.Quit
 		}
 	}
@@ -37,10 +52,10 @@ func quit(msg tea.Msg, keys keyMap) tea.Cmd {
 }
 
 /* Navigates to the previous model */
-func back(msg tea.Msg, keys keyMap) Quitter {
+func back(msg tea.Msg, keybinding key.Binding) Quitter {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
-		if slices.Contains(keys.Back.Keys(), msg.String()) {
+		if slices.Contains(keybinding.Keys(), msg.String()) {
 			return newFirstModel()
 		}
 	}
@@ -56,5 +71,27 @@ func (k keyMap) FullHelp() [][]key.Binding {
 }
 
 func (k keyMap) ShortHelp() []key.Binding {
-	return []key.Binding{k.Back, k.Quit}
+	return []key.Binding{
+		k.Back,
+		k.Quit,
+		k.Select,
+		k.Up,
+		k.Down,
+	}
+}
+
+type statusMsg int
+type errMsg struct{ err error }
+
+func (e errMsg) Error() string { return e.err.Error() }
+
+type up int
+type down int
+
+func moveUp() tea.Msg {
+	return up(0)
+}
+
+func moveDown() tea.Msg {
+	return down(0)
 }
