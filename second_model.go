@@ -1,20 +1,51 @@
 package main
 
 import (
+	"fmt"
 	"slices"
 
+	help "github.com/charmbracelet/bubbles/help"
+	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
+type keyMap struct {
+	Quit key.Binding
+	Back key.Binding
+}
+
+// FullHelp returns keybindings for the expanded help view. It's part of the
+// key.Map interface.
+func (k keyMap) FullHelp() [][]key.Binding {
+	return [][]key.Binding{
+		{k.Quit},
+	}
+}
+
+func (k keyMap) ShortHelp() []key.Binding {
+	return []key.Binding{k.Back, k.Quit}
+}
+
 func newSecondModel() NestedView {
 	m := SecondModel{
-		backKeys: []string{"esc"},
+		keys: keyMap{
+			Quit: key.NewBinding(
+				key.WithKeys("ctrl+c"),
+				key.WithHelp("q", "quit"),
+			),
+			Back: key.NewBinding(
+				key.WithKeys("esc"),
+				key.WithHelp("esc", "back"),
+			),
+		},
+		help: help.New(),
 	}
 	return m
 }
 
 type SecondModel struct {
-	backKeys []string
+	keys keyMap
+	help help.Model
 }
 
 func (m SecondModel) Init() tea.Cmd {
@@ -44,7 +75,10 @@ func (m SecondModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m SecondModel) View() string {
-	return "Second view!"
+	base := "Second view"
+	helpView := m.help.View(m.keys)
+	base += fmt.Sprintf("\n\n%s", helpView)
+	return base
 }
 
 /* Non-Standard Methods */
@@ -55,7 +89,7 @@ func (m SecondModel) quit(msg tea.Msg) tea.Cmd {
 func (m SecondModel) back(msg tea.Msg) Quitter {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
-		if slices.Contains(m.backKeys, msg.String()) {
+		if slices.Contains(m.keys.Quit.Keys(), msg.String()) {
 			return newFirstModel()
 		}
 	}
