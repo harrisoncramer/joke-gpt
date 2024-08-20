@@ -30,11 +30,14 @@ func newSecondModel() NestedView {
 	m := SecondModel{
 		keys: keyMap{
 			Quit: key.NewBinding(
-				key.WithKeys("ctrl+c"),
-				key.WithHelp("q", "quit"),
+				key.WithKeys(
+					tea.KeyCtrlC.String(),
+					tea.KeyCtrlD.String(),
+				),
+				key.WithHelp("ctrl+c/ctrl+d", "quit"),
 			),
 			Back: key.NewBinding(
-				key.WithKeys("esc"),
+				key.WithKeys(tea.KeyEsc.String()),
 				key.WithHelp("esc", "back"),
 			),
 		},
@@ -55,7 +58,7 @@ func (m SecondModel) Init() tea.Cmd {
 func (m SecondModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	quit := m.quit(m)
 	if quit != nil {
-		return nil, quit
+		return m, quit
 	}
 
 	back := m.back(msg)
@@ -65,9 +68,8 @@ func (m SecondModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
-		switch msg.String() {
-		case "esc":
-			return newFirstModel(), nil
+		if slices.Contains(m.keys.Quit.Keys(), msg.String()) {
+			return m, tea.Quit
 		}
 	}
 
@@ -83,13 +85,19 @@ func (m SecondModel) View() string {
 
 /* Non-Standard Methods */
 func (m SecondModel) quit(msg tea.Msg) tea.Cmd {
-	return quit(msg)
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
+		if slices.Contains(m.keys.Quit.Keys(), msg.String()) {
+			return tea.Quit
+		}
+	}
+	return nil
 }
 
 func (m SecondModel) back(msg tea.Msg) Quitter {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
-		if slices.Contains(m.keys.Quit.Keys(), msg.String()) {
+		if slices.Contains(m.keys.Back.Keys(), msg.String()) {
 			return newFirstModel()
 		}
 	}
