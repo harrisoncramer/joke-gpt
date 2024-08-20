@@ -3,9 +3,20 @@ package main
 import (
 	"fmt"
 	"os"
+	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
 )
+
+type TuiOptions struct {
+	cursorIcon    string
+	globalTimeout time.Duration
+}
+
+var tuiOptions = TuiOptions{
+	cursorIcon:    ">",
+	globalTimeout: time.Second * 2,
+}
 
 func main() {
 	m := newFirstModel()

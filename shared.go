@@ -80,7 +80,6 @@ func (k keyMap) ShortHelp() []key.Binding {
 	}
 }
 
-type statusMsg int
 type errMsg struct{ err error }
 
 func (e errMsg) Error() string { return e.err.Error() }
