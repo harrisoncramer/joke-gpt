@@ -21,11 +21,11 @@ const (
 	Down Direction = "down"
 )
 
-type move struct {
+type moveMsg struct {
 	direction Direction
 }
 
-type selectedEntry struct {
+type selectMsg struct {
 	value string
 }
 
@@ -45,7 +45,7 @@ func newSelector() Selector {
 	return m
 }
 
-func (s *Selector) move(movement move) {
+func (s *Selector) move(movement moveMsg) {
 	if movement.direction == Up {
 		if s.cursor > 0 {
 			s.cursor--
@@ -73,13 +73,13 @@ func (s Selector) Input(msg tea.KeyMsg) tea.Cmd {
 	return func() tea.Msg {
 		str := msg.String()
 		if slices.Contains(s.keys.Down.Keys(), str) {
-			return move{direction: Down}
+			return moveMsg{direction: Down}
 		}
 		if slices.Contains(s.keys.Up.Keys(), str) {
-			return move{direction: Up}
+			return moveMsg{direction: Up}
 		}
 		if slices.Contains(s.keys.Select.Keys(), str) {
-			return selectedEntry{value: s.options[s.cursor].Value}
+			return selectMsg{value: s.options[s.cursor].Value}
 		}
 		return nil
 	}

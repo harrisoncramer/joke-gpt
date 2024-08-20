@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"slices"
 
 	help "github.com/charmbracelet/bubbles/help"
 	tea "github.com/charmbracelet/bubbletea"
@@ -19,10 +18,9 @@ type SecondModel struct {
 }
 
 func newSecondModel() NestedView {
-	selector := newSelector()
 	return SecondModel{
 		keys:     newKeys(),
-		selector: selector,
+		selector: newSelector(),
 		help:     help.New(),
 	}
 }
@@ -32,11 +30,6 @@ func (m SecondModel) Init() tea.Cmd {
 }
 
 func (m SecondModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	quit := m.quit(msg)
-	if quit != nil {
-		return m, quit
-	}
-
 	switch msg := msg.(type) {
 	case errMsg:
 		m.err = msg
@@ -44,12 +37,14 @@ func (m SecondModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	/* Logic for the selector */
 	case optionsMsg:
 		m.selector.options = msg.options
-	case move:
+	case moveMsg:
 		m.selector.move(msg)
 	case tea.KeyMsg:
-		if slices.Contains(m.keys.Back.Keys(), msg.String()) {
-			firstModel := newFirstModel()
-			return firstModel, firstModel.Init()
+		switch msg.String() {
+		case pluginOpts.Keys.Quit:
+			return m, tea.Quit
+		case pluginOpts.Keys.Back:
+			return m.back(msg)
 		}
 		return m, m.selector.Input(msg)
 	}
@@ -69,12 +64,9 @@ func (m SecondModel) View() string {
 	return base
 }
 
-func (m SecondModel) quit(msg tea.Msg) tea.Cmd {
-	return quit(msg, m.keys.Quit)
-}
-
-func (m SecondModel) back(msg tea.Msg) Quitter {
-	return newFirstModel()
+func (m SecondModel) back(msg tea.Msg) (tea.Model, tea.Cmd) {
+	firstModel := newFirstModel()
+	return firstModel, firstModel.Init()
 }
 
 func (m SecondModel) getOptions() tea.Msg {

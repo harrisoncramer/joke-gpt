@@ -14,14 +14,12 @@ type MainModel struct {
 	err      error
 }
 
-func newFirstModel() Quitter {
-	selector := newSelector()
-	m := MainModel{
+func newFirstModel() tea.Model {
+	return MainModel{
 		keys:     newKeys(),
 		help:     help.New(),
-		selector: selector,
+		selector: newSelector(),
 	}
-	return m
 }
 
 func (m MainModel) Init() tea.Cmd {
@@ -29,11 +27,6 @@ func (m MainModel) Init() tea.Cmd {
 }
 
 func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	cmd := m.quit(msg)
-	if cmd != nil {
-		return m, cmd
-	}
-
 	switch msg := msg.(type) {
 	case errMsg:
 		m.err = msg
@@ -41,14 +34,18 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	/* Logic for the selector */
 	case optionsMsg:
 		m.selector.options = msg.options
-	case move:
+	case moveMsg:
 		m.selector.move(msg)
-	case selectedEntry:
+	case selectMsg:
 		if msg.value == "Second" {
 			secondModel := newSecondModel()
 			return secondModel, secondModel.Init()
 		}
 	case tea.KeyMsg:
+		switch msg.String() {
+		case pluginOpts.Keys.Quit:
+			return m, tea.Quit
+		}
 		return m, m.selector.Input(msg)
 	}
 	return m, nil
