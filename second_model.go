@@ -2,19 +2,15 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
-	"slices"
 	"time"
 
 	help "github.com/charmbracelet/bubbles/help"
 	tea "github.com/charmbracelet/bubbletea"
 )
-
-type Cursor struct {
-	line int
-}
 
 type Option struct {
 	Label string `json:"label"`
@@ -28,26 +24,26 @@ type optionsMsg struct {
 }
 
 type SecondModel struct {
-	err     error
-	keys    keyMap
-	help    help.Model
-	cursor  Cursor
-	options []Option
+	err      error
+	keys     keyMap
+	help     help.Model
+	options  []Option
+	selector Selector
 }
 
 func newSecondModel() NestedView {
-	m := SecondModel{
-		cursor: Cursor{},
+	selector := newSelector()
+	return SecondModel{
 		keys: keyMap{
 			Quit:   quitKeys,
 			Back:   backKeys,
-			Select: selectKeys,
-			Up:     upKeys,
-			Down:   downKeys,
+			Select: selector.keys.Select,
+			Up:     selector.keys.Up,
+			Down:   selector.keys.Down,
 		},
-		help: help.New(),
+		selector: selector,
+		help:     help.New(),
 	}
-	return m
 }
 
 var count = ""
@@ -70,30 +66,22 @@ func (m SecondModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	switch msg := msg.(type) {
 	case up:
-		if m.cursor.line > 0 {
-			m.cursor.line--
-		}
-		return m, nil
+		m.selector.up()
 	case down:
-		if m.cursor.line < len(m.options)-1 {
-			m.cursor.line++
-		}
-		return m, nil
+		m.selector.down()
 	case statusMsg:
 		return m, tea.Quit
 	case errMsg:
 		m.err = msg
-		return m, nil
 	case optionsMsg:
-		m.options = msg.options
+		m.selector.options = msg.options
+	case selectedEntry:
+		m.err = errors.New("Chosen!")
 		return m, nil
 	case tea.KeyMsg:
-		str := msg.String()
-		if slices.Contains(m.keys.Down.Keys(), str) {
-			return m, moveDown
-		}
-		if slices.Contains(m.keys.Up.Keys(), str) {
-			return m, moveUp
+		selectorChange := m.selector.Input(msg)
+		if selectorChange != nil {
+			return m, selectorChange
 		}
 	}
 
@@ -101,19 +89,12 @@ func (m SecondModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m SecondModel) View() string {
-	base := ""
 	if m.err != nil {
 		return m.err.Error()
 	}
 
-	for i, option := range m.options {
-		if i == m.cursor.line {
-			base += fmt.Sprintf("> %s\n", option.Label)
-		} else {
-			base += fmt.Sprintf("  %s\n", option.Label)
-		}
-	}
-
+	base := ""
+	base += m.selector.Render()
 	base += fmt.Sprintf("\n%s", m.help.View(m.keys))
 
 	return base

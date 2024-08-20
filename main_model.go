@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"slices"
 
 	help "github.com/charmbracelet/bubbles/help"
 	tea "github.com/charmbracelet/bubbletea"
@@ -35,8 +36,7 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
-		switch msg.String() {
-		case "enter":
+		if slices.Contains(m.keys.Select.Keys(), msg.String()) {
 			secondModel := newSecondModel()
 			return secondModel, secondModel.Init()
 		}
