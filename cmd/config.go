@@ -3,12 +3,14 @@ package cmd
 import (
 	"fmt"
 
+	app "github.com/harrisoncramer/nested-models/app"
 	"github.com/harrisoncramer/nested-models/shared"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
-func initializeConfig(cmd *cobra.Command) (shared.PluginOpts, error) {
+/* Sets default configuration options then reads in the configuration file and sets it in the app */
+func initializeConfig(cmd *cobra.Command) error {
 	p := shared.PluginOpts{}
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
@@ -29,12 +31,12 @@ func initializeConfig(cmd *cobra.Command) (shared.PluginOpts, error) {
 	err := viper.ReadInConfig()
 
 	if err != nil {
-		return p, fmt.Errorf("Fatal error reading configuration file: %v", err)
+		return fmt.Errorf("Fatal error reading configuration file: %v", err)
 	}
 
 	flagToken, err := cmd.Flags().GetString("token")
 	if err != nil {
-		return p, err
+		return err
 	}
 
 	if flagToken != "" {
@@ -42,8 +44,9 @@ func initializeConfig(cmd *cobra.Command) (shared.PluginOpts, error) {
 	}
 
 	if err := viper.Unmarshal(&p); err != nil {
-		return p, fmt.Errorf("Fatal error unmarshalling configuration file: %v", err)
+		return fmt.Errorf("Fatal error unmarshalling configuration file: %v", err)
 	}
 
-	return p, nil
+	app.PluginOptions = p
+	return nil
 }

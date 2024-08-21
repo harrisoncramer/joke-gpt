@@ -1,4 +1,4 @@
-package cmd
+package app
 
 import (
 	"fmt"
@@ -51,9 +51,9 @@ func (s Selector) Render() string {
 	base := ""
 	for i, option := range s.options {
 		if i == s.cursor {
-			base += fmt.Sprintf("%s %s\n", PluginOpts.Display.Cursor, option.Label)
+			base += fmt.Sprintf("%s %s\n", PluginOptions.Display.Cursor, option.Label)
 		} else {
-			base += fmt.Sprintf("%s %s\n", strings.Repeat(" ", len(PluginOpts.Display.Cursor)), option.Label)
+			base += fmt.Sprintf("%s %s\n", strings.Repeat(" ", len(PluginOptions.Display.Cursor)), option.Label)
 		}
 	}
 	return base
@@ -62,13 +62,13 @@ func (s Selector) Render() string {
 func (s Selector) Input(msg tea.KeyMsg) tea.Cmd {
 	return func() tea.Msg {
 		str := msg.String()
-		if PluginOpts.Keys.Down == str {
+		if PluginOptions.Keys.Down == str {
 			return moveMsg{direction: Down}
 		}
-		if PluginOpts.Keys.Up == str {
+		if PluginOptions.Keys.Up == str {
 			return moveMsg{direction: Up}
 		}
-		if PluginOpts.Keys.Select == str {
+		if PluginOptions.Keys.Select == str {
 			return selectMsg{value: s.options[s.cursor].Value}
 		}
 		return nil

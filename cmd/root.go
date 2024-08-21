@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 
-	tea "github.com/charmbracelet/bubbletea"
 	app "github.com/harrisoncramer/nested-models/app"
 	"github.com/spf13/cobra"
 )
@@ -19,19 +18,13 @@ var rootCmd = &cobra.Command{
 	Use:   "sh",
 	Short: "A TUI for interacting with Shortcut from the command line",
 	Run: func(cmd *cobra.Command, args []string) {
-		opts, err := initializeConfig(cmd)
+		err := initializeConfig(cmd)
 		if err != nil {
-			fmt.Printf("Error parsing configuration: %v", err)
+			fmt.Printf("Error configuring application: %v", err)
 			os.Exit(1)
 		}
 
-		app.PluginOpts = opts
-		m := app.NewFirstModel()
-		p := tea.NewProgram(m)
-		if _, err := p.Run(); err != nil {
-			fmt.Printf("Error starting BubbleTea: %v", err)
-			os.Exit(1)
-		}
+		app.Start()
 	},
 }
 

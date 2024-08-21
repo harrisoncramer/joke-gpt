@@ -1,4 +1,4 @@
-package cmd
+package app
 
 import (
 	"encoding/json"
@@ -31,10 +31,13 @@ func (m SecondModel) Init() tea.Cmd {
 }
 
 func (m SecondModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	if m.err != nil {
+		return m, tea.Quit
+	}
+
 	switch msg := msg.(type) {
 	case errMsg:
 		m.err = msg
-
 	/* Logic for the selector */
 	case optionsMsg:
 		m.selector.options = msg.options
@@ -42,9 +45,9 @@ func (m SecondModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.selector.move(msg)
 	case tea.KeyMsg:
 		switch msg.String() {
-		case PluginOpts.Keys.Quit:
+		case PluginOptions.Keys.Quit:
 			return m, tea.Quit
-		case PluginOpts.Keys.Back:
+		case PluginOptions.Keys.Back:
 			return m.back(msg)
 		}
 		return m, m.selector.Input(msg)
@@ -71,7 +74,7 @@ func (m SecondModel) back(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m SecondModel) getOptions() tea.Msg {
-	c := &http.Client{Timeout: time.Duration(PluginOpts.Network.Timeout) * time.Millisecond}
+	c := &http.Client{Timeout: time.Duration(PluginOptions.Network.Timeout) * time.Millisecond}
 	res, err := c.Get("http://localhost:3000/options")
 
 	if err != nil {

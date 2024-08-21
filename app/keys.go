@@ -1,4 +1,4 @@
-package cmd
+package app
 
 import (
 	"slices"
@@ -18,27 +18,27 @@ type keyMap struct {
 func newKeys(isNested bool) keyMap {
 	k := keyMap{
 		Quit: key.NewBinding(
-			key.WithKeys(PluginOpts.Keys.Quit),
-			key.WithHelp(PluginOpts.Keys.Quit, "quit"),
+			key.WithKeys(PluginOptions.Keys.Quit),
+			key.WithHelp(PluginOptions.Keys.Quit, "quit"),
 		),
 		Select: key.NewBinding(
-			key.WithKeys(PluginOpts.Keys.Select),
-			key.WithHelp(PluginOpts.Keys.Select, "select"),
+			key.WithKeys(PluginOptions.Keys.Select),
+			key.WithHelp(PluginOptions.Keys.Select, "select"),
 		),
 		Up: key.NewBinding(
-			key.WithKeys(PluginOpts.Keys.Up),
-			key.WithHelp(PluginOpts.Keys.Up, "up"),
+			key.WithKeys(PluginOptions.Keys.Up),
+			key.WithHelp(PluginOptions.Keys.Up, "up"),
 		),
 		Down: key.NewBinding(
-			key.WithKeys(PluginOpts.Keys.Down),
-			key.WithHelp(PluginOpts.Keys.Down, "down"),
+			key.WithKeys(PluginOptions.Keys.Down),
+			key.WithHelp(PluginOptions.Keys.Down, "down"),
 		),
 	}
 
 	if isNested {
 		k.Back = key.NewBinding(
-			key.WithKeys(PluginOpts.Keys.Back),
-			key.WithHelp(PluginOpts.Keys.Back, "back"),
+			key.WithKeys(PluginOptions.Keys.Back),
+			key.WithHelp(PluginOptions.Keys.Back, "back"),
 		)
 	}
 

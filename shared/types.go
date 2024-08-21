@@ -1,5 +1,6 @@
 package shared
 
+/* The options for the plugin, read into the application by Viper from a YAML file */
 type PluginOpts struct {
 	Token   string      `mapstructure:"token"`
 	Network NetworkOpts `mapstructure:"network"`

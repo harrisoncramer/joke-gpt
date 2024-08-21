@@ -1,22 +1,18 @@
-package cmd
+package app
 
 import (
 	"fmt"
 
 	help "github.com/charmbracelet/bubbles/help"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/harrisoncramer/nested-models/shared"
 )
 
 type MainModel struct {
-	opts     shared.PluginOpts
 	keys     keyMap
 	help     help.Model
 	selector Selector
 	err      error
 }
-
-var PluginOpts shared.PluginOpts
 
 func NewFirstModel() tea.Model {
 	return MainModel{
@@ -31,10 +27,14 @@ func (m MainModel) Init() tea.Cmd {
 }
 
 func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	/* Exit after error */
+	if m.err != nil {
+		return m, tea.Quit
+	}
+
 	switch msg := msg.(type) {
 	case errMsg:
 		m.err = msg
-
 	/* Logic for the selector */
 	case optionsMsg:
 		m.selector.options = msg.options
@@ -47,7 +47,7 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	case tea.KeyMsg:
 		switch msg.String() {
-		case PluginOpts.Keys.Quit:
+		case PluginOptions.Keys.Quit:
 			return m, tea.Quit
 		}
 		return m, m.selector.Input(msg)
