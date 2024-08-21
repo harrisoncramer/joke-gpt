@@ -1,3 +1,3 @@
-# Bubble Tea + Cobra
+# Bubble Tea + Cobra + Viper
 
-This Repository is a template for creating Bubble Tea and Cobra CLI/TUI tools.
+This Repository is a template for creating CLI/TUI tools with Bubble Tea, Cobra, and Viper.
