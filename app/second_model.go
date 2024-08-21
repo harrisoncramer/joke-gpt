@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"time"
 
 	help "github.com/charmbracelet/bubbles/help"
 	tea "github.com/charmbracelet/bubbletea"
@@ -41,9 +42,9 @@ func (m SecondModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.selector.move(msg)
 	case tea.KeyMsg:
 		switch msg.String() {
-		case pluginOpts.Keys.Quit:
+		case PluginOpts.Keys.Quit:
 			return m, tea.Quit
-		case pluginOpts.Keys.Back:
+		case PluginOpts.Keys.Back:
 			return m.back(msg)
 		}
 		return m, m.selector.Input(msg)
@@ -65,12 +66,12 @@ func (m SecondModel) View() string {
 }
 
 func (m SecondModel) back(msg tea.Msg) (tea.Model, tea.Cmd) {
-	firstModel := newFirstModel()
+	firstModel := NewFirstModel()
 	return firstModel, firstModel.Init()
 }
 
 func (m SecondModel) getOptions() tea.Msg {
-	c := &http.Client{Timeout: pluginOpts.Network.TimeoutMillis}
+	c := &http.Client{Timeout: time.Duration(PluginOpts.Network.Timeout) * time.Millisecond}
 	res, err := c.Get("http://localhost:3000/options")
 
 	if err != nil {

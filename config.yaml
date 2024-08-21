@@ -1,4 +1,2 @@
-display:
-  cursor: ">>"
+token: "blah"
 network:
-  timeout: 1000

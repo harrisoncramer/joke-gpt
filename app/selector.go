@@ -51,9 +51,9 @@ func (s Selector) Render() string {
 	base := ""
 	for i, option := range s.options {
 		if i == s.cursor {
-			base += fmt.Sprintf("%s %s\n", pluginOpts.Display.Cursor, option.Label)
+			base += fmt.Sprintf("%s %s\n", PluginOpts.Display.Cursor, option.Label)
 		} else {
-			base += fmt.Sprintf("%s %s\n", strings.Repeat(" ", len(pluginOpts.Display.Cursor)), option.Label)
+			base += fmt.Sprintf("%s %s\n", strings.Repeat(" ", len(PluginOpts.Display.Cursor)), option.Label)
 		}
 	}
 	return base
@@ -62,13 +62,13 @@ func (s Selector) Render() string {
 func (s Selector) Input(msg tea.KeyMsg) tea.Cmd {
 	return func() tea.Msg {
 		str := msg.String()
-		if pluginOpts.Keys.Down == str {
+		if PluginOpts.Keys.Down == str {
 			return moveMsg{direction: Down}
 		}
-		if pluginOpts.Keys.Up == str {
+		if PluginOpts.Keys.Up == str {
 			return moveMsg{direction: Up}
 		}
-		if pluginOpts.Keys.Select == str {
+		if PluginOpts.Keys.Select == str {
 			return selectMsg{value: s.options[s.cursor].Value}
 		}
 		return nil

@@ -5,16 +5,20 @@ import (
 
 	help "github.com/charmbracelet/bubbles/help"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/harrisoncramer/nested-models/shared"
 )
 
 type MainModel struct {
+	opts     shared.PluginOpts
 	keys     keyMap
 	help     help.Model
 	selector Selector
 	err      error
 }
 
-func newFirstModel() tea.Model {
+var PluginOpts shared.PluginOpts
+
+func NewFirstModel() tea.Model {
 	return MainModel{
 		keys:     newKeys(false),
 		help:     help.New(),
@@ -43,7 +47,7 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	case tea.KeyMsg:
 		switch msg.String() {
-		case pluginOpts.Keys.Quit:
+		case PluginOpts.Keys.Quit:
 			return m, tea.Quit
 		}
 		return m, m.selector.Input(msg)
@@ -66,8 +70,8 @@ func (m MainModel) getOptions() tea.Msg {
 	return optionsMsg{
 		options: []Option{
 			{
-				Label: "Blah",
-				Value: "Blah",
+				Label: "View Config",
+				Value: "view_config",
 			},
 			{
 				Label: "Second",

@@ -18,27 +18,27 @@ type keyMap struct {
 func newKeys(isNested bool) keyMap {
 	k := keyMap{
 		Quit: key.NewBinding(
-			key.WithKeys(pluginOpts.Keys.Quit),
-			key.WithHelp(pluginOpts.Keys.Quit, "quit"),
+			key.WithKeys(PluginOpts.Keys.Quit),
+			key.WithHelp(PluginOpts.Keys.Quit, "quit"),
 		),
 		Select: key.NewBinding(
-			key.WithKeys(pluginOpts.Keys.Select),
-			key.WithHelp(pluginOpts.Keys.Select, "select"),
+			key.WithKeys(PluginOpts.Keys.Select),
+			key.WithHelp(PluginOpts.Keys.Select, "select"),
 		),
 		Up: key.NewBinding(
-			key.WithKeys(pluginOpts.Keys.Up),
-			key.WithHelp(pluginOpts.Keys.Up, "up"),
+			key.WithKeys(PluginOpts.Keys.Up),
+			key.WithHelp(PluginOpts.Keys.Up, "up"),
 		),
 		Down: key.NewBinding(
-			key.WithKeys(pluginOpts.Keys.Down),
-			key.WithHelp(pluginOpts.Keys.Down, "down"),
+			key.WithKeys(PluginOpts.Keys.Down),
+			key.WithHelp(PluginOpts.Keys.Down, "down"),
 		),
 	}
 
 	if isNested {
 		k.Back = key.NewBinding(
-			key.WithKeys(pluginOpts.Keys.Back),
-			key.WithHelp(pluginOpts.Keys.Back, "back"),
+			key.WithKeys(PluginOpts.Keys.Back),
+			key.WithHelp(PluginOpts.Keys.Back, "back"),
 		)
 	}
 
