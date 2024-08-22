@@ -1,4 +1,4 @@
-module github.com/harrisoncramer/my-gpt
+module github.com/harrisoncramer/joke-gpt
 
 go 1.22.5
 

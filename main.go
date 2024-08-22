@@ -1,7 +1,7 @@
 package main
 
 import (
-	cmd "github.com/harrisoncramer/my-gpt/cmd"
+	cmd "github.com/harrisoncramer/joke-gpt/cmd"
 )
 
 func main() {

@@ -19,12 +19,12 @@ func NewFirstModel() tea.Model {
 		selector: Selector{
 			options: []Option{
 				{
-					Label: "Quit",
-					Value: "quit",
-				},
-				{
 					Label: "Tell Joke",
 					Value: "joke",
+				},
+				{
+					Label: "Quit",
+					Value: "quit",
 				},
 			},
 		},

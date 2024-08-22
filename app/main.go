@@ -5,7 +5,7 @@ import (
 	"os"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/harrisoncramer/my-gpt/shared"
+	"github.com/harrisoncramer/joke-gpt/shared"
 )
 
 /* Global plugin options shared across models */

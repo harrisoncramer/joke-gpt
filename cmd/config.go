@@ -1,10 +1,12 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
+	"os"
 
-	app "github.com/harrisoncramer/my-gpt/app"
-	"github.com/harrisoncramer/my-gpt/shared"
+	app "github.com/harrisoncramer/joke-gpt/app"
+	"github.com/harrisoncramer/joke-gpt/shared"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -23,6 +25,7 @@ func initializeConfig(cmd *cobra.Command) error {
 	viper.SetDefault("keys.back", "esc")
 	viper.SetDefault("keys.repeat", "r")
 	viper.BindPFlag("token", cmd.PersistentFlags().Lookup("token"))
+	viper.SetDefault("token", os.Getenv("OPEN_API_KEY"))
 
 	/* Look for config file in current directory by default */
 	configFile, _ := cmd.Flags().GetString("config")
@@ -38,6 +41,10 @@ func initializeConfig(cmd *cobra.Command) error {
 
 	if err := viper.Unmarshal(&p); err != nil {
 		return fmt.Errorf("Fatal error unmarshalling configuration file: %v", err)
+	}
+
+	if viper.Get("token") == "" {
+		return errors.New("ChatGPT API Key is required!")
 	}
 
 	app.PluginOptions = p
