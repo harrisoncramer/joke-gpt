@@ -1,6 +1,3 @@
-/*
-Copyright © 2024 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
@@ -12,7 +9,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// jokeCmd represents the joke command
 var jokeCmd = &cobra.Command{
 	Use:   "joke",
 	Short: "Tell a joke immediately",
