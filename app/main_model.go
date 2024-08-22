@@ -10,7 +10,7 @@ import (
 type MainModel struct {
 	keys     keyMap
 	help     help.Model
-	selector tea.Model
+	selector Selector
 	err      error
 }
 
@@ -42,12 +42,18 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, tea.Quit
 	}
 
-	var cmd tea.Cmd
+	/* Handle possible commands by selector */
+	updatedSelector, selectorCmd := m.selector.maybeUpdate(msg)
+	m.selector = updatedSelector
+	if selectorCmd != nil {
+		return m, selectorCmd
+	}
+
+	/* All other events */
 	switch msg := msg.(type) {
 	case errMsg:
 		m.err = msg
-	case optionsMsg, moveMsg:
-		m.selector, cmd = m.selector.Update(msg)
+		return m, nil
 	case selectMsg:
 		if msg.value == "second" {
 			secondModel := newSecondModel()
@@ -57,11 +63,10 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.String() {
 		case PluginOptions.Keys.Quit:
 			return m, tea.Quit
-		case PluginOptions.Keys.Down, PluginOptions.Keys.Up, PluginOptions.Keys.Select:
-			m.selector, cmd = m.selector.Update(msg)
 		}
 	}
-	return m, cmd
+
+	return m, nil
 }
 
 func (m MainModel) View() string {

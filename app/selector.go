@@ -36,7 +36,7 @@ func (s Selector) Init() tea.Cmd {
 	return nil
 }
 
-func (s Selector) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (s Selector) Update(msg tea.Msg) (Selector, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
@@ -79,4 +79,19 @@ func (s *Selector) move(direction Direction) {
 /* Chooses the value at the given index */
 func (s Selector) selectVal() tea.Msg {
 	return selectMsg{value: s.options[s.cursor].Value}
+}
+
+/* If a key was pressed, call the update function if it's relevant. This lets us group all of the key logic in one method */
+func (s Selector) maybeUpdate(msg tea.Msg) (Selector, tea.Cmd) {
+	switch msg := msg.(type) {
+	case optionsMsg, moveMsg:
+		return s.Update(msg)
+	case tea.KeyMsg:
+		switch msg.String() {
+		case PluginOptions.Keys.Down, PluginOptions.Keys.Up, PluginOptions.Keys.Select:
+			return s.Update(msg)
+		}
+	}
+
+	return s, nil
 }

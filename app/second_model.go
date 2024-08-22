@@ -12,17 +12,15 @@ import (
 )
 
 type SecondModel struct {
-	err      error
-	keys     keyMap
-	help     help.Model
-	selector tea.Model
+	err  error
+	keys keyMap
+	help help.Model
 }
 
 func newSecondModel() NestedView {
 	return SecondModel{
-		keys:     newKeys(true),
-		selector: Selector{},
-		help:     help.New(),
+		keys: newKeys(true),
+		help: help.New(),
 	}
 }
 
@@ -39,15 +37,10 @@ func (m SecondModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case errMsg:
 		m.err = msg
-	case optionsMsg, moveMsg:
-		m.selector, cmd = m.selector.Update(msg)
 	case tea.KeyMsg:
 		switch msg.String() {
 		case PluginOptions.Keys.Quit:
 			return m, tea.Quit
-		case PluginOptions.Keys.Down:
-		case PluginOptions.Keys.Up:
-			m.selector, cmd = m.selector.Update(msg)
 		}
 	}
 
@@ -60,7 +53,6 @@ func (m SecondModel) View() string {
 	}
 
 	base := "Second View\n"
-	base += m.selector.View()
 	base += fmt.Sprintf("\n%s", m.help.View(m.keys))
 
 	return base
