@@ -12,16 +12,10 @@ import (
 )
 
 type SecondModel struct {
-	err  error
-	keys keyMap
-	help help.Model
-}
-
-func newSecondModel() NestedView {
-	return SecondModel{
-		keys: newKeys(true),
-		help: help.New(),
-	}
+	err      error
+	keys     keyMap
+	help     help.Model
+	selector Selector
 }
 
 func (m SecondModel) Init() tea.Cmd {
@@ -33,6 +27,13 @@ func (m SecondModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, tea.Quit
 	}
 
+	/* Handle possible commands by selector */
+	updatedSelector, selectorCmd := m.selector.maybeUpdate(msg)
+	m.selector = updatedSelector
+	if selectorCmd != nil {
+		return m, selectorCmd
+	}
+
 	var cmd tea.Cmd
 	switch msg := msg.(type) {
 	case errMsg:
@@ -41,6 +42,9 @@ func (m SecondModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.String() {
 		case PluginOptions.Keys.Quit:
 			return m, tea.Quit
+		case PluginOptions.Keys.Back:
+			firstModel := NewFirstModel()
+			return firstModel, firstModel.Init()
 		}
 	}
 
@@ -53,14 +57,10 @@ func (m SecondModel) View() string {
 	}
 
 	base := "Second View\n"
-	base += fmt.Sprintf("\n%s", m.help.View(m.keys))
+	base += m.selector.View()
+	base += fmt.Sprintf("\n\n%s", m.help.View(m.keys))
 
 	return base
-}
-
-func (m SecondModel) back(msg tea.Msg) (tea.Model, tea.Cmd) {
-	firstModel := NewFirstModel()
-	return firstModel, firstModel.Init()
 }
 
 type OptionsResponse []Option

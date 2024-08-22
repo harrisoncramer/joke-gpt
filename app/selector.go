@@ -38,6 +38,8 @@ func (s Selector) Init() tea.Cmd {
 
 func (s Selector) Update(msg tea.Msg) (Selector, tea.Cmd) {
 	switch msg := msg.(type) {
+	case optionsMsg:
+		s.setOptions(msg.options)
 	case tea.KeyMsg:
 		switch msg.String() {
 		case PluginOptions.Keys.Down:
@@ -74,6 +76,11 @@ func (s *Selector) move(direction Direction) {
 			s.cursor++
 		}
 	}
+}
+
+/* Sets options on the selector */
+func (s *Selector) setOptions(options []Option) {
+	s.options = options
 }
 
 /* Chooses the value at the given index */

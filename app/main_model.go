@@ -56,7 +56,10 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, nil
 	case selectMsg:
 		if msg.value == "second" {
-			secondModel := newSecondModel()
+			secondModel := SecondModel{
+				keys: newKeys(true),
+				help: help.New(),
+			}
 			return secondModel, secondModel.Init()
 		}
 	case tea.KeyMsg:
