@@ -4,7 +4,7 @@ This Repository is a template for creating CLI/TUI tools with Bubble Tea, Cobra,
 
 # Configuration
 
-The plugin expects a configuration file in the current directory called `config.yaml` which contains the following schema:
+The plugin can use a configuration file in the current directory called `config.yaml` which contains the following schema:
 
 ```yaml
 token: "api-token"
