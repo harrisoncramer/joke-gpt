@@ -5,17 +5,20 @@ import (
 
 	help "github.com/charmbracelet/bubbles/help"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/harrisoncramer/joke-gpt/shared"
 )
 
 type MainModel struct {
-	help     help.Model
-	selector Selector
-	err      error
+	immediate bool
+	help      help.Model
+	selector  Selector
+	err       error
 }
 
-func NewFirstModel() tea.Model {
+func NewFirstModel(args shared.AppStartArgs) tea.Model {
 	return MainModel{
-		help: help.New(),
+		help:      help.New(),
+		immediate: args.Immediate,
 		selector: Selector{
 			options: []Option{
 				{
@@ -32,6 +35,11 @@ func NewFirstModel() tea.Model {
 }
 
 func (m MainModel) Init() tea.Cmd {
+	if m.immediate {
+		return func() tea.Msg {
+			return selectMsg{value: "joke"}
+		}
+	}
 	return nil
 }
 

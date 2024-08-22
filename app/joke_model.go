@@ -5,6 +5,7 @@ import (
 
 	help "github.com/charmbracelet/bubbles/help"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/harrisoncramer/joke-gpt/shared"
 )
 
 type JokeModel struct {
@@ -41,7 +42,7 @@ func (m JokeModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case PluginOptions.Keys.Quit:
 			return m, tea.Quit
 		case PluginOptions.Keys.Back:
-			firstModel := NewFirstModel()
+			firstModel := NewFirstModel(shared.AppStartArgs{})
 			return firstModel, firstModel.Init()
 		}
 	}

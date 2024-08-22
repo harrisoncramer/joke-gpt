@@ -5,6 +5,7 @@ import (
 	"os"
 
 	app "github.com/harrisoncramer/joke-gpt/app"
+	"github.com/harrisoncramer/joke-gpt/shared"
 	"github.com/spf13/cobra"
 )
 
@@ -24,7 +25,7 @@ var rootCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		app.Start()
+		app.Start(shared.AppStartArgs{})
 	},
 }
 

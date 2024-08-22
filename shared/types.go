@@ -24,3 +24,7 @@ type KeyOpts struct {
 type DisplayOpts struct {
 	Cursor string `mapstructure:"cursor"`
 }
+
+type AppStartArgs struct {
+	Immediate bool
+}

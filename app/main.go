@@ -12,8 +12,8 @@ import (
 var PluginOptions shared.PluginOpts
 
 /* Initializes the root model and starts the TUI application */
-func Start() {
-	m := NewFirstModel()
+func Start(args shared.AppStartArgs) {
+	m := NewFirstModel(args)
 	p := tea.NewProgram(m)
 	if _, err := p.Run(); err != nil {
 		fmt.Printf("Error starting BubbleTea: %v", err)
