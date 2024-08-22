@@ -5,12 +5,8 @@ import (
 	"os"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/harrisoncramer/nested-models/shared"
+	"github.com/harrisoncramer/my-gpt/shared"
 )
-
-type DisplayOpts struct {
-	Cursor string `mapstructure:"cursor"`
-}
 
 /* Global plugin options shared across models */
 var PluginOptions shared.PluginOpts
