@@ -7,6 +7,11 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
+type Option struct {
+	Label string `json:"label"`
+	Value string `json:"value"`
+}
+
 type Selector struct {
 	cursor  int
 	options []Option
@@ -27,27 +32,26 @@ type selectMsg struct {
 	value string
 }
 
-func newSelector() Selector {
-	m := Selector{
-		cursor: 0,
-	}
-
-	return m
+func (s Selector) Init() tea.Cmd {
+	return nil
 }
 
-func (s *Selector) move(movement moveMsg) {
-	if movement.direction == Up {
-		if s.cursor > 0 {
-			s.cursor--
-		}
-	} else {
-		if s.cursor < len(s.options)-1 {
-			s.cursor++
+func (s Selector) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
+		switch msg.String() {
+		case PluginOptions.Keys.Down:
+			s.move(Down)
+		case PluginOptions.Keys.Up:
+			s.move(Up)
+		case PluginOptions.Keys.Select:
+			return s, s.selectVal
 		}
 	}
+	return s, nil
 }
 
-func (s Selector) Render() string {
+func (s Selector) View() string {
 	base := ""
 	for i, option := range s.options {
 		if i == s.cursor {
@@ -59,29 +63,20 @@ func (s Selector) Render() string {
 	return base
 }
 
-func (s Selector) Input(msg tea.KeyMsg) tea.Cmd {
-	return func() tea.Msg {
-		str := msg.String()
-		if PluginOptions.Keys.Down == str {
-			return moveMsg{direction: Down}
+/* Moves the cursor up or down among the options */
+func (s *Selector) move(direction Direction) {
+	if direction == Up {
+		if s.cursor > 0 {
+			s.cursor--
 		}
-		if PluginOptions.Keys.Up == str {
-			return moveMsg{direction: Up}
+	} else {
+		if s.cursor < len(s.options)-1 {
+			s.cursor++
 		}
-		if PluginOptions.Keys.Select == str {
-			return selectMsg{value: s.options[s.cursor].Value}
-		}
-		return nil
 	}
 }
 
-type Option struct {
-	Label string `json:"label"`
-	Value string `json:"value"`
-}
-
-type OptionsResponse []Option
-
-type optionsMsg struct {
-	options []Option
+/* Chooses the value at the given index */
+func (s Selector) selectVal() tea.Msg {
+	return selectMsg{value: s.options[s.cursor].Value}
 }
