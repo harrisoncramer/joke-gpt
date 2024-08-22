@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	app "github.com/harrisoncramer/nested-models/app"
+	app "github.com/harrisoncramer/my-gpt/app"
 	"github.com/spf13/cobra"
 )
 
@@ -15,8 +15,8 @@ func init() {
 }
 
 var rootCmd = &cobra.Command{
-	Use:   "sh",
-	Short: "A TUI for interacting with Shortcut from the command line",
+	Use:   "my-gpt",
+	Short: "A TUI for interacting with ChatGPT from the command line",
 	Run: func(cmd *cobra.Command, args []string) {
 		err := initializeConfig(cmd)
 		if err != nil {

@@ -36,6 +36,7 @@ func (s Selector) Init() tea.Cmd {
 	return nil
 }
 
+/* Responds to keypresses that are defined in our plugin options and updates the model, and/or selects a value */
 func (s Selector) Update(msg tea.Msg) (Selector, tea.Cmd) {
 	switch msg := msg.(type) {
 	case optionsMsg:
@@ -53,6 +54,7 @@ func (s Selector) Update(msg tea.Msg) (Selector, tea.Cmd) {
 	return s, nil
 }
 
+/* Renders the choices and the current cursor */
 func (s Selector) View() string {
 	base := ""
 	for i, option := range s.options {

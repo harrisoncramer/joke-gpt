@@ -3,8 +3,8 @@ package cmd
 import (
 	"fmt"
 
-	app "github.com/harrisoncramer/nested-models/app"
-	"github.com/harrisoncramer/nested-models/shared"
+	app "github.com/harrisoncramer/my-gpt/app"
+	"github.com/harrisoncramer/my-gpt/shared"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

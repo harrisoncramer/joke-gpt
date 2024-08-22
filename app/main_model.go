@@ -78,7 +78,3 @@ func (m MainModel) View() string {
 	base += fmt.Sprintf("\n\n%s", m.help.View(m.keys))
 	return base
 }
-
-func (m MainModel) quit(msg tea.Msg) tea.Cmd {
-	return quit(msg, m.keys.Quit)
-}

@@ -1,7 +1,7 @@
 package main
 
 import (
-	cmd "github.com/harrisoncramer/nested-models/cmd"
+	cmd "github.com/harrisoncramer/my-gpt/cmd"
 )
 
 func main() {

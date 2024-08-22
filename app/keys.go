@@ -1,10 +1,7 @@
 package app
 
 import (
-	"slices"
-
 	"github.com/charmbracelet/bubbles/key"
-	tea "github.com/charmbracelet/bubbletea"
 )
 
 type keyMap struct {
@@ -43,17 +40,6 @@ func newKeys(isNested bool) keyMap {
 	}
 
 	return k
-}
-
-/* Handles quitting the application when certain keys are pressed */
-func quit(msg tea.Msg, keybinding key.Binding) tea.Cmd {
-	switch msg := msg.(type) {
-	case tea.KeyMsg:
-		if slices.Contains(keybinding.Keys(), msg.String()) {
-			return tea.Quit
-		}
-	}
-	return nil
 }
 
 // FullHelp returns keybindings for the expanded help view. It's part of the

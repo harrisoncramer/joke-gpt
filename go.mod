@@ -1,4 +1,4 @@
-module github.com/harrisoncramer/nested-models
+module github.com/harrisoncramer/my-gpt
 
 go 1.22.5
 
