@@ -21,6 +21,7 @@ func initializeConfig(cmd *cobra.Command) error {
 	viper.SetDefault("keys.select", "enter")
 	viper.SetDefault("keys.quit", "ctrl+c")
 	viper.SetDefault("keys.back", "esc")
+	viper.SetDefault("keys.repeat", "r")
 	viper.BindPFlag("token", cmd.PersistentFlags().Lookup("token"))
 
 	/* Look for config file in current directory by default */

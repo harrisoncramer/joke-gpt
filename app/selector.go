@@ -32,6 +32,10 @@ type selectMsg struct {
 	value string
 }
 
+type optionsMsg struct {
+	options []Option
+}
+
 func (s Selector) Init() tea.Cmd {
 	return nil
 }

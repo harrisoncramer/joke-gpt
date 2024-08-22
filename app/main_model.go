@@ -8,7 +8,6 @@ import (
 )
 
 type MainModel struct {
-	keys     keyMap
 	help     help.Model
 	selector Selector
 	err      error
@@ -16,17 +15,16 @@ type MainModel struct {
 
 func NewFirstModel() tea.Model {
 	return MainModel{
-		keys: newKeys(false),
 		help: help.New(),
 		selector: Selector{
 			options: []Option{
 				{
-					Label: "View Config",
-					Value: "view_config",
+					Label: "Quit",
+					Value: "quit",
 				},
 				{
-					Label: "Second",
-					Value: "second",
+					Label: "Tell Joke",
+					Value: "joke",
 				},
 			},
 		},
@@ -55,12 +53,15 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.err = msg
 		return m, nil
 	case selectMsg:
-		if msg.value == "second" {
-			secondModel := SecondModel{
-				keys: newKeys(true),
+		if msg.value == "joke" {
+			secondModel := JokeModel{
 				help: help.New(),
+				keys: newKeys(true),
 			}
 			return secondModel, secondModel.Init()
+		}
+		if msg.value == "quit" {
+			return m, tea.Quit
 		}
 	case tea.KeyMsg:
 		switch msg.String() {
@@ -73,8 +74,8 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m MainModel) View() string {
-	base := "Main View\n"
+	base := "GPT Joke\n\n"
 	base += m.selector.View()
-	base += fmt.Sprintf("\n\n%s", m.help.View(m.keys))
+	base += fmt.Sprintf("\n\n%s", m.help.View(newKeys(false)))
 	return base
 }
