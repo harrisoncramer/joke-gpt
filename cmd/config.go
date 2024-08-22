@@ -21,26 +21,18 @@ func initializeConfig(cmd *cobra.Command) error {
 	viper.SetDefault("keys.select", "enter")
 	viper.SetDefault("keys.quit", "ctrl+c")
 	viper.SetDefault("keys.back", "esc")
+	viper.BindPFlag("token", cmd.PersistentFlags().Lookup("token"))
 
+	/* Look for config file in current directory by default */
 	configFile, _ := cmd.Flags().GetString("config")
 	if configFile == "" {
 		configFile = "."
 	}
-
 	viper.AddConfigPath(configFile)
 	err := viper.ReadInConfig()
 
 	if err != nil {
 		return fmt.Errorf("Fatal error reading configuration file: %v", err)
-	}
-
-	flagToken, err := cmd.Flags().GetString("token")
-	if err != nil {
-		return err
-	}
-
-	if flagToken != "" {
-		viper.Set("token", flagToken)
 	}
 
 	if err := viper.Unmarshal(&p); err != nil {
