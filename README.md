@@ -9,7 +9,7 @@ The plugin can use a configuration file in the current directory called `config.
 ```yaml
 token: "api-token"
 network:
-  timeout: 5000
+  timeout: 5000 # In milliseconds
 display:
   cursor: ">"
 keys:
