@@ -34,8 +34,7 @@ func initializeConfig(cmd *cobra.Command) error {
 	}
 	viper.AddConfigPath(configFile)
 	err := viper.ReadInConfig()
-
-	if err != nil {
+	if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
 		return fmt.Errorf("Fatal error reading configuration file: %v", err)
 	}
 
