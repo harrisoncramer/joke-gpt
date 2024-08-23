@@ -112,7 +112,9 @@ func (m SelectorModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			cmds = append(cmds, textinput.Blink)
 			m.filter.Focus()
 		case PluginOptions.Keys.Back:
-			m.filter.Blur()
+			if len(m.visibleOptions) > 0 {
+				m.filter.Blur()
+			}
 		}
 	}
 
@@ -124,11 +126,16 @@ func (m SelectorModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m SelectorModel) View() string {
 	base := ""
 	base += fmt.Sprintf("%s\n", m.filter.View())
-	for i, option := range m.visibleOptions {
-		if i == m.cursor {
-			base += fmt.Sprintf("%s %s\n", PluginOptions.Display.Cursor, option.Label)
-		} else {
-			base += fmt.Sprintf("%s %s\n", strings.Repeat(" ", len(PluginOptions.Display.Cursor)), option.Label)
+
+	if len(m.visibleOptions) == 0 {
+		base += "No options found \n"
+	} else {
+		for i, option := range m.visibleOptions {
+			if i == m.cursor {
+				base += fmt.Sprintf("%s %s\n", PluginOptions.Display.Cursor, option.Label)
+			} else {
+				base += fmt.Sprintf("%s %s\n", strings.Repeat(" ", len(PluginOptions.Display.Cursor)), option.Label)
+			}
 		}
 	}
 	return base
@@ -141,7 +148,7 @@ func (m *SelectorModel) move(direction Direction) {
 			m.cursor--
 		}
 	} else {
-		if m.cursor < len(m.options)-1 {
+		if m.cursor < len(m.visibleOptions)-1 {
 			m.cursor++
 		}
 	}
