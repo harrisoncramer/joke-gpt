@@ -20,11 +20,13 @@ type JokeModel struct {
 func NewJokeModel() tea.Model {
 	s := spinner.New()
 	s.Style = lipgloss.NewStyle().Foreground(lipgloss.Color("205"))
-	return JokeModel{
+	m := JokeModel{
 		help:    help.New(),
 		keys:    newKeys(true),
 		spinner: s,
 	}
+
+	return m
 }
 
 type tellJokeMsg struct{}
@@ -63,7 +65,7 @@ func (m JokeModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case PluginOptions.Keys.Quit:
 			return m, tea.Quit
 		case PluginOptions.Keys.Back:
-			firstModel := NewFirstModel()
+			firstModel := NewMainModel()
 			return firstModel, firstModel.Init()
 		}
 	}

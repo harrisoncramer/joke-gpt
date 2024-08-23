@@ -11,6 +11,7 @@ type keyMap struct {
 	Up     key.Binding
 	Down   key.Binding
 	Repeat key.Binding
+	Filter key.Binding
 }
 
 func newKeys(isNested bool) keyMap {
@@ -35,13 +36,14 @@ func newKeys(isNested bool) keyMap {
 			key.WithKeys(PluginOptions.Keys.Repeat),
 			key.WithHelp(PluginOptions.Keys.Repeat, "repeat"),
 		),
-	}
-
-	if isNested {
-		k.Back = key.NewBinding(
+		Back: key.NewBinding(
 			key.WithKeys(PluginOptions.Keys.Back),
 			key.WithHelp(PluginOptions.Keys.Back, "back"),
-		)
+		),
+		Filter: key.NewBinding(
+			key.WithKeys(PluginOptions.Keys.Back),
+			key.WithHelp(PluginOptions.Keys.Back, "back"),
+		),
 	}
 
 	return k

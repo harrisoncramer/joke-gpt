@@ -28,7 +28,7 @@ func Start(view shared.View) {
 	case shared.JokeView:
 		m = NewJokeModel()
 	default:
-		m = NewFirstModel()
+		m = NewMainModel()
 	}
 
 	p := tea.NewProgram(m)

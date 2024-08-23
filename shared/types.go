@@ -20,6 +20,7 @@ type KeyOpts struct {
 	Back   string `mapstructure:"back"`
 	Quit   string `mapstructure:"quit"`
 	Repeat string `mapstructure:"repeat"`
+	Filter string `mapstructure:"filter"`
 }
 
 type DisplayOpts struct {

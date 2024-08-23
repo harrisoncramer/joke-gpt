@@ -23,13 +23,19 @@ var quitOption = Option{
 	Value: "quit",
 }
 
-func NewFirstModel() tea.Model {
-	return MainModel{
-		help: help.New(),
-		selector: SelectorModel{
-			options: []Option{jokeOption, quitOption},
+func NewMainModel() tea.Model {
+	s := NewSelectorModel(NewSelectorModelOpts{
+		filter: FilterOpts{
+			placeholder: "Search...",
 		},
+		options: []Option{jokeOption, quitOption},
+	})
+	m := MainModel{
+		help:     help.New(),
+		selector: s,
 	}
+
+	return m
 }
 
 func (m MainModel) Init() tea.Cmd {
