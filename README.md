@@ -12,6 +12,9 @@ network:
   timeout: 5000 # In milliseconds
 display:
   cursor: ">"
+debug:
+  filepath: "debug.log"
+  messages: false
 keys:
   up: "k"
   down: "j"
