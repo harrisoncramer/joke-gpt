@@ -6,7 +6,7 @@ type PluginOpts struct {
 	Network NetworkOpts `mapstructure:"network"`
 	Display DisplayOpts `mapstructure:"display"`
 	Keys    KeyOpts     `mapstructure:"keys"`
-	Debug   DebugOpts   `mapstructure:"keys"`
+	Debug   DebugOpts   `mapstructure:"debug"`
 }
 
 type NetworkOpts struct {

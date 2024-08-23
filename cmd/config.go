@@ -24,10 +24,10 @@ func initializeConfig(cmd *cobra.Command) error {
 	viper.SetDefault("keys.quit", "ctrl+c")
 	viper.SetDefault("keys.back", "esc")
 	viper.SetDefault("keys.repeat", "r")
-	viper.SetDefault("debug.log_messages", false)
+	viper.SetDefault("debug.messages", false)
 	viper.SetDefault("debug.location", "debug.log")
-	viper.BindPFlag("token", cmd.PersistentFlags().Lookup("token"))
 	viper.SetDefault("token", os.Getenv("OPENAI_API_KEY"))
+	viper.BindPFlag("token", cmd.PersistentFlags().Lookup("token"))
 
 	/* Look for config file in current directory by default */
 	configFile, _ := cmd.Flags().GetString("config")

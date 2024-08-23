@@ -28,6 +28,7 @@ func (m JokeModel) Init() tea.Cmd {
 }
 
 func (m JokeModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	debugMsg(m, msg)
 	if m.err != nil {
 		return m, tea.Quit
 	}

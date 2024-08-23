@@ -16,7 +16,7 @@ type MainModel struct {
 func NewFirstModel() tea.Model {
 	return MainModel{
 		help: help.New(),
-		selector: Selector{
+		selector: SelectorModel{
 			options: []Option{
 				{
 					Label: "Tell Joke",
@@ -36,12 +36,13 @@ func (m MainModel) Init() tea.Cmd {
 }
 
 func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	debugMsg(m, msg)
 	if m.err != nil {
 		return m, tea.Quit
 	}
 
 	/* Handle possible commands by selector */
-	updatedSelector, selectorCmd := m.selector.maybeUpdate(msg)
+	updatedSelector, selectorCmd := m.selector.Update(msg)
 	m.selector = updatedSelector
 	if selectorCmd != nil {
 		return m, selectorCmd
