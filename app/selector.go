@@ -33,9 +33,10 @@ type Selector interface {
 }
 
 type SelectorModel struct {
-	cursor  int
-	options Options
-	filter  textinput.Model
+	cursor         int
+	options        Options
+	visibleOptions Options
+	filter         textinput.Model
 }
 
 type Direction string
@@ -67,19 +68,16 @@ type NewSelectorModelOpts struct {
 	options []Option
 }
 
-func NewFilterModel() textinput.Model {
-	ti := textinput.New()
-	ti.Placeholder = "Cool"
-	return ti
-}
-
 func NewSelectorModel(opts NewSelectorModelOpts) SelectorModel {
 	m := SelectorModel{
-		options: opts.options,
+		options:        opts.options,
+		visibleOptions: opts.options,
 	}
 
 	if !opts.filter.hidden {
-		m.filter = NewFilterModel()
+		ti := textinput.New()
+		ti.Placeholder = opts.filter.placeholder
+		m.filter = ti
 	}
 
 	return m
@@ -97,7 +95,6 @@ func (m SelectorModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	/* Handle our filtering */
 	var cmd tea.Cmd
 	m.filter, cmd = m.filter.Update(msg)
-	m.options = m.options.Filter(m.filter.Value())
 	cmds = append(cmds, cmd)
 
 	switch msg := msg.(type) {
@@ -119,6 +116,7 @@ func (m SelectorModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	}
 
+	m.visibleOptions = m.options.Filter(m.filter.Value())
 	return m, tea.Batch(cmds...)
 }
 
@@ -126,7 +124,7 @@ func (m SelectorModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m SelectorModel) View() string {
 	base := ""
 	base += fmt.Sprintf("%s\n", m.filter.View())
-	for i, option := range m.options {
+	for i, option := range m.visibleOptions {
 		if i == m.cursor {
 			base += fmt.Sprintf("%s %s\n", PluginOptions.Display.Cursor, option.Label)
 		} else {
