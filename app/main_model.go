@@ -13,20 +13,21 @@ type MainModel struct {
 	err      error
 }
 
+var jokeOption = Option{
+	Label: "Tell Joke",
+	Value: "joke",
+}
+
+var quitOption = Option{
+	Label: "Quit",
+	Value: "quit",
+}
+
 func NewFirstModel() tea.Model {
 	return MainModel{
 		help: help.New(),
 		selector: SelectorModel{
-			options: []Option{
-				{
-					Label: "Tell Joke",
-					Value: "joke",
-				},
-				{
-					Label: "Quit",
-					Value: "quit",
-				},
-			},
+			options: []Option{jokeOption, quitOption},
 		},
 	}
 }
@@ -54,11 +55,11 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.err = msg
 		return m, nil
 	case selectMsg:
-		if msg.value == "joke" {
+		if msg.option.Value == jokeOption.Value {
 			jokeModel := NewJokeModel()
 			return jokeModel, jokeModel.Init()
 		}
-		if msg.value == "quit" {
+		if msg.option.Value == quitOption.Value {
 			return m, tea.Quit
 		}
 	case tea.KeyMsg:

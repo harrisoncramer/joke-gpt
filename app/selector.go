@@ -33,7 +33,7 @@ type moveMsg struct {
 }
 
 type selectMsg struct {
-	value string
+	option Option
 }
 
 type optionsMsg struct {
@@ -96,7 +96,7 @@ func (m *SelectorModel) setOptions(options []Option) {
 
 /* Chooses the value at the given index */
 func (s SelectorModel) selectVal() tea.Msg {
-	return selectMsg{value: s.options[s.cursor].Value}
+	return selectMsg{s.options[s.cursor]}
 }
 
 /* If a key was pressed, call the update function if it's relevant. This lets us group all of the key logic in one method */
