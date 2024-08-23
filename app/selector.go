@@ -90,8 +90,10 @@ func (m SelectorModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmds []tea.Cmd
 	debugMsg(m, msg)
 
+	/* Handle our filtering */
 	var cmd tea.Cmd
 	m.filter, cmd = m.filter.Update(msg)
+	m.options = m.options.Filter(m.filter.Value())
 	cmds = append(cmds, cmd)
 
 	switch msg := msg.(type) {
@@ -120,7 +122,7 @@ func (m SelectorModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m SelectorModel) View() string {
 	base := ""
 	base += fmt.Sprintf("%s\n", m.filter.View())
-	for i, option := range m.options.Filter(m.filter.Value()) {
+	for i, option := range m.options {
 		if i == m.cursor {
 			base += fmt.Sprintf("%s %s\n", PluginOptions.Display.Cursor, option.Label)
 		} else {
