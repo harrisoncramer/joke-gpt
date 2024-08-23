@@ -6,6 +6,7 @@ type PluginOpts struct {
 	Network NetworkOpts `mapstructure:"network"`
 	Display DisplayOpts `mapstructure:"display"`
 	Keys    KeyOpts     `mapstructure:"keys"`
+	Debug   DebugOpts   `mapstructure:"keys"`
 }
 
 type NetworkOpts struct {
@@ -25,6 +26,14 @@ type DisplayOpts struct {
 	Cursor string `mapstructure:"cursor"`
 }
 
-type AppStartArgs struct {
-	Immediate bool
+type DebugOpts struct {
+	Location    string `mapstructure:"location"`
+	LogMessages bool   `mapstructure:"log_messages"`
 }
+
+type View string
+
+const (
+	RootView View = "root"
+	JokeView View = "joke"
+)

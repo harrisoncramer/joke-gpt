@@ -24,8 +24,10 @@ func initializeConfig(cmd *cobra.Command) error {
 	viper.SetDefault("keys.quit", "ctrl+c")
 	viper.SetDefault("keys.back", "esc")
 	viper.SetDefault("keys.repeat", "r")
+	viper.SetDefault("debug.log_messages", false)
+	viper.SetDefault("debug.location", "debug.log")
 	viper.BindPFlag("token", cmd.PersistentFlags().Lookup("token"))
-	viper.SetDefault("token", os.Getenv("OPEN_API_KEY"))
+	viper.SetDefault("token", os.Getenv("OPENAI_API_KEY"))
 
 	/* Look for config file in current directory by default */
 	configFile, _ := cmd.Flags().GetString("config")
@@ -34,16 +36,18 @@ func initializeConfig(cmd *cobra.Command) error {
 	}
 	viper.AddConfigPath(configFile)
 	err := viper.ReadInConfig()
-	if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
-		return fmt.Errorf("Fatal error reading configuration file: %v", err)
+	if err != nil {
+		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
+			return fmt.Errorf("Fatal error reading configuration file: %v\n", err)
+		}
 	}
 
 	if err := viper.Unmarshal(&p); err != nil {
-		return fmt.Errorf("Fatal error unmarshalling configuration file: %v", err)
+		return fmt.Errorf("Fatal error unmarshalling configuration file: %v\n", err)
 	}
 
 	if viper.Get("token") == "" {
-		return errors.New("ChatGPT API Key is required!")
+		return errors.New("ChatGPT API Key is required!\n")
 	}
 
 	app.PluginOptions = p
