@@ -42,18 +42,17 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, tea.Quit
 	}
 
+	var cmds = []tea.Cmd{}
+
 	/* Handle possible commands by selector */
-	updatedSelector, selectorCmd := m.selector.Update(msg)
-	m.selector = updatedSelector
-	if selectorCmd != nil {
-		return m, selectorCmd
-	}
+	var cmd tea.Cmd
+	m.selector, cmd = m.selector.Update(msg)
+	cmds = append(cmds, cmd)
 
 	/* All other events */
 	switch msg := msg.(type) {
 	case errMsg:
 		m.err = msg
-		return m, nil
 	case selectMsg:
 		if msg.option.Value == jokeOption.Value {
 			jokeModel := NewJokeModel()
@@ -69,7 +68,7 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	}
 
-	return m, nil
+	return m, tea.Batch(cmds...)
 }
 
 func (m MainModel) View() string {
