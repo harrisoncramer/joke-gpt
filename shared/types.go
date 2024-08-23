@@ -27,7 +27,7 @@ type DisplayOpts struct {
 }
 
 type DebugOpts struct {
-	Location    string `mapstructure:"location"`
+	FilePath    string `mapstructure:"filepath"`
 	LogMessages bool   `mapstructure:"log_messages"`
 }
 

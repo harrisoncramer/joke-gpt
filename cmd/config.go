@@ -25,7 +25,7 @@ func initializeConfig(cmd *cobra.Command) error {
 	viper.SetDefault("keys.back", "esc")
 	viper.SetDefault("keys.repeat", "r")
 	viper.SetDefault("debug.messages", false)
-	viper.SetDefault("debug.location", "debug.log")
+	viper.SetDefault("debug.filepath", "debug.log")
 	viper.SetDefault("token", os.Getenv("OPENAI_API_KEY"))
 	viper.BindPFlag("token", cmd.PersistentFlags().Lookup("token"))
 

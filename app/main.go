@@ -15,7 +15,7 @@ var PluginOptions shared.PluginOpts
 /* Initializes the root model and starts the TUI application */
 func Start(view shared.View) {
 	if viper.GetBool("debug.messages") {
-		f, err := tea.LogToFile(PluginOptions.Debug.Location, "debug")
+		f, err := tea.LogToFile(PluginOptions.Debug.FilePath, "debug")
 		if err != nil {
 			fmt.Printf("Error setting up logging: %v\n", err)
 			os.Exit(1)
