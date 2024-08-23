@@ -21,6 +21,7 @@ type KeyOpts struct {
 	Quit   string `mapstructure:"quit"`
 	Repeat string `mapstructure:"repeat"`
 	Filter string `mapstructure:"filter"`
+	Help   string `mapstructure:"help"`
 }
 
 type DisplayOpts struct {

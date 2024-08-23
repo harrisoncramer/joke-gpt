@@ -30,8 +30,10 @@ func NewMainModel() tea.Model {
 		},
 		options: []Option{jokeOption, quitOption},
 	})
+
+	h := help.New()
 	m := MainModel{
-		help:     help.New(),
+		help:     h,
 		selector: s,
 	}
 
@@ -71,6 +73,8 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.String() {
 		case PluginOptions.Keys.Quit:
 			return m, tea.Quit
+		case PluginOptions.Keys.Help:
+			m.help.ShowAll = !m.help.ShowAll
 		}
 	}
 
@@ -80,6 +84,6 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m MainModel) View() string {
 	base := "GPT Joke\n\n"
 	base += m.selector.View()
-	base += fmt.Sprintf("\n\n%s", m.help.View(newKeys(false)))
+	base += fmt.Sprintf("\n\n%s", m.help.View(newKeys()))
 	return base
 }

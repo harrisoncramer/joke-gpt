@@ -22,7 +22,7 @@ func NewJokeModel() tea.Model {
 	s.Style = lipgloss.NewStyle().Foreground(lipgloss.Color("205"))
 	m := JokeModel{
 		help:    help.New(),
-		keys:    newKeys(true),
+		keys:    newKeys(),
 		spinner: s,
 	}
 
@@ -86,7 +86,7 @@ func (m JokeModel) View() string {
 		base += fmt.Sprintf("\n%s", m.joke)
 	}
 
-	base += fmt.Sprintf("\n\n%s", m.help.View(newKeys(true)))
+	base += fmt.Sprintf("\n\n%s", m.help.View(newKeys()))
 
 	return base
 }

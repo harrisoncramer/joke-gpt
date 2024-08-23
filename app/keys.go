@@ -12,9 +12,10 @@ type keyMap struct {
 	Down   key.Binding
 	Repeat key.Binding
 	Filter key.Binding
+	Help   key.Binding
 }
 
-func newKeys(isNested bool) keyMap {
+func newKeys() keyMap {
 	k := keyMap{
 		Quit: key.NewBinding(
 			key.WithKeys(PluginOptions.Keys.Quit),
@@ -41,8 +42,12 @@ func newKeys(isNested bool) keyMap {
 			key.WithHelp(PluginOptions.Keys.Back, "back"),
 		),
 		Filter: key.NewBinding(
-			key.WithKeys(PluginOptions.Keys.Back),
-			key.WithHelp(PluginOptions.Keys.Back, "back"),
+			key.WithKeys(PluginOptions.Keys.Filter),
+			key.WithHelp(PluginOptions.Keys.Filter, "filter"),
+		),
+		Help: key.NewBinding(
+			key.WithKeys(PluginOptions.Keys.Help),
+			key.WithHelp(PluginOptions.Keys.Help, "toggle help"),
 		),
 	}
 
@@ -53,17 +58,22 @@ func newKeys(isNested bool) keyMap {
 // key.Map interface.
 func (k keyMap) FullHelp() [][]key.Binding {
 	return [][]key.Binding{
-		{},
+		{
+			k.Back,
+			k.Quit,
+			k.Select,
+			k.Up,
+			k.Down,
+			k.Repeat,
+			k.Filter,
+			k.Help,
+		},
 	}
 }
 
 func (k keyMap) ShortHelp() []key.Binding {
 	return []key.Binding{
-		k.Back,
 		k.Quit,
-		k.Select,
-		k.Up,
-		k.Down,
-		k.Repeat,
+		k.Help,
 	}
 }
