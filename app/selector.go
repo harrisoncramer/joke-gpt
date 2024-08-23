@@ -67,15 +67,19 @@ type NewSelectorModelOpts struct {
 	options []Option
 }
 
+func NewFilterModel() textinput.Model {
+	ti := textinput.New()
+	ti.Placeholder = "Cool"
+	return ti
+}
+
 func NewSelectorModel(opts NewSelectorModelOpts) SelectorModel {
 	m := SelectorModel{
 		options: opts.options,
 	}
 
 	if !opts.filter.hidden {
-		ti := textinput.New()
-		ti.Placeholder = opts.filter.placeholder
-		m.filter = ti
+		m.filter = NewFilterModel()
 	}
 
 	return m
