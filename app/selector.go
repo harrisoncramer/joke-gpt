@@ -98,18 +98,3 @@ func (m *SelectorModel) setOptions(options []Option) {
 func (s SelectorModel) selectVal() tea.Msg {
 	return selectMsg{s.options[s.cursor]}
 }
-
-/* If a key was pressed, call the update function if it's relevant. This lets us group all of the key logic in one method */
-func (s SelectorModel) maybeUpdate(msg tea.Msg) (Selector, tea.Cmd) {
-	switch msg := msg.(type) {
-	case optionsMsg, moveMsg:
-		return s.Update(msg)
-	case tea.KeyMsg:
-		switch msg.String() {
-		case PluginOptions.Keys.Down, PluginOptions.Keys.Up, PluginOptions.Keys.Select:
-			return s.Update(msg)
-		}
-	}
-
-	return s, nil
-}
