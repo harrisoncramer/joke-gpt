@@ -65,6 +65,9 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case errMsg:
 		m.err = msg
 	case selectMsg:
+		if msg.option.Value == "quit" {
+			return m, tea.Quit
+		}
 		return m, changeView(msg.option.Value)
 	case tea.KeyMsg:
 		switch msg.String() {
