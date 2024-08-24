@@ -68,8 +68,6 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, changeView(msg.option.Value)
 	case tea.KeyMsg:
 		switch msg.String() {
-		case PluginOptions.Keys.Quit:
-			return m, tea.Quit
 		case PluginOptions.Keys.Help:
 			m.help.ShowAll = !m.help.ShowAll
 		}
