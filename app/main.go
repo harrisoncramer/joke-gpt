@@ -13,7 +13,7 @@ import (
 var PluginOptions shared.PluginOpts
 
 /* Initializes the root model and starts the TUI application */
-func Start(view shared.View) {
+func Start(view string) {
 	if viper.GetBool("debug.messages") {
 		f, err := tea.LogToFile(PluginOptions.Debug.FilePath, "debug")
 		if err != nil {

@@ -33,9 +33,8 @@ type DebugOpts struct {
 	LogMessages bool   `mapstructure:"log_messages"`
 }
 
-type View string
-
 const (
-	RootView View = "root"
-	JokeView View = "joke"
+	RootView    string = "root"
+	JokeView    string = "joke"
+	JokeTwoView string = "joke_2"
 )

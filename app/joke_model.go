@@ -7,6 +7,7 @@ import (
 	"github.com/charmbracelet/bubbles/spinner"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/harrisoncramer/joke-gpt/shared"
 )
 
 type JokeModel struct {
@@ -26,7 +27,9 @@ func NewJokeModel() tea.Model {
 		spinner: s,
 	}
 
-	return m
+	return Router{
+		Model: m,
+	}
 }
 
 type tellJokeMsg struct{}
@@ -62,11 +65,8 @@ func (m JokeModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case PluginOptions.Keys.Repeat:
 			m.joke = ""
 			cmds = append(cmds, getJoke)
-		case PluginOptions.Keys.Quit:
-			return m, tea.Quit
 		case PluginOptions.Keys.Back:
-			firstModel := NewMainModel()
-			return firstModel, firstModel.Init()
+			return m, changeView(shared.RootView)
 		}
 	}
 

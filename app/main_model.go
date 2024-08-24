@@ -5,6 +5,7 @@ import (
 
 	help "github.com/charmbracelet/bubbles/help"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/harrisoncramer/joke-gpt/shared"
 )
 
 type MainModel struct {
@@ -15,7 +16,7 @@ type MainModel struct {
 
 var jokeOption = Option{
 	Label: "Tell Joke",
-	Value: "joke",
+	Value: shared.JokeView,
 }
 
 var quitOption = Option{
@@ -37,7 +38,9 @@ func NewMainModel() tea.Model {
 		selector: s,
 	}
 
-	return m
+	return Router{
+		Model: m,
+	}
 }
 
 func (m MainModel) Init() tea.Cmd {
@@ -62,13 +65,7 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case errMsg:
 		m.err = msg
 	case selectMsg:
-		if msg.option.Value == jokeOption.Value {
-			jokeModel := NewJokeModel()
-			return jokeModel, jokeModel.Init()
-		}
-		if msg.option.Value == quitOption.Value {
-			return m, tea.Quit
-		}
+		return m, changeView(msg.option.Value)
 	case tea.KeyMsg:
 		switch msg.String() {
 		case PluginOptions.Keys.Quit:
