@@ -5,6 +5,7 @@ import (
 	"os"
 
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/harrisoncramer/joke-gpt/app/router"
 	"github.com/harrisoncramer/joke-gpt/shared"
 	"github.com/spf13/viper"
 )
@@ -23,7 +24,15 @@ func Start(view string) {
 		defer f.Close()
 	}
 
-	m := NewRouterModel(view)
+	m := router.NewRouterModel(router.NewRouterModelOpts{
+		Quit: PluginOptions.Keys.Quit,
+		Views: map[string]tea.Model{
+			shared.JokeView: NewJokeModel(),
+			shared.RootView: NewMainModel(),
+		},
+		View: view,
+	})
+
 	p := tea.NewProgram(m)
 	if _, err := p.Run(); err != nil {
 		fmt.Printf("Error starting BubbleTea: %v\n", err)

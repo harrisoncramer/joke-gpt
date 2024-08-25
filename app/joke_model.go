@@ -7,6 +7,7 @@ import (
 	"github.com/charmbracelet/bubbles/spinner"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/harrisoncramer/joke-gpt/app/router"
 	"github.com/harrisoncramer/joke-gpt/shared"
 )
 
@@ -62,7 +63,7 @@ func (m JokeModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.joke = ""
 			cmds = append(cmds, getJoke)
 		case PluginOptions.Keys.Back:
-			return m, changeView(shared.RootView)
+			return m, router.ChangeView(shared.RootView)
 		}
 	}
 

@@ -5,6 +5,7 @@ import (
 
 	help "github.com/charmbracelet/bubbles/help"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/harrisoncramer/joke-gpt/app/router"
 	"github.com/harrisoncramer/joke-gpt/shared"
 )
 
@@ -64,7 +65,7 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if msg.option.Value == "quit" {
 			return m, tea.Quit
 		}
-		return m, changeView(msg.option.Value)
+		return m, router.ChangeView(msg.option.Value)
 	case tea.KeyMsg:
 		switch msg.String() {
 		case PluginOptions.Keys.Help:

@@ -1,35 +1,47 @@
-package app
+package router
 
 import (
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/harrisoncramer/joke-gpt/shared"
 )
 
+type Views map[string]tea.Model
+
 type Router struct {
-	Model tea.Model
+	Model   tea.Model
+	Views   Views
+	QuitKey string
 }
 
 type changeViewMsg struct {
 	view string
 }
 
-func NewRouterModel(view string) tea.Model {
-	m := getModel(view)
-	return Router{
-		Model: m,
+type NewRouterModelOpts struct {
+	View  string
+	Views Views
+	Quit  string
+}
+
+// Creates a new router that is responsible for handling navigation around the application via the changeView function
+func NewRouterModel(opts NewRouterModelOpts) tea.Model {
+	r := Router{
+		Views:   opts.Views,
+		QuitKey: opts.Quit,
 	}
+
+	r.setModel(opts.View)
+	return r
 }
 
 // Update method that handles common keystrokes before delegating to the underlying model
 func (m Router) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	debugMsg(m, msg)
-	if cmd := m.HandleQuit(msg); cmd != nil {
+	if cmd := m.handleQuit(msg); cmd != nil {
 		return m, cmd
 	}
 
 	switch msg := msg.(type) {
 	case changeViewMsg:
-		m.Model = getModel(msg.view)
+		m.setModel(msg.view)
 		return m, m.Model.Init()
 	}
 
@@ -46,28 +58,23 @@ func (m Router) Init() tea.Cmd {
 	return m.Model.Init()
 }
 
-func (m *Router) HandleQuit(msg tea.Msg) tea.Cmd {
+func (m *Router) handleQuit(msg tea.Msg) tea.Cmd {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
-		case PluginOptions.Keys.Quit:
+		case m.QuitKey:
 			return tea.Quit
 		}
 	}
 	return nil
 }
 
-func changeView(view string) tea.Cmd {
+func ChangeView(view string) tea.Cmd {
 	return func() tea.Msg {
 		return changeViewMsg{view: view}
 	}
 }
 
-func getModel(view string) tea.Model {
-	switch view {
-	case shared.JokeView:
-		return NewJokeModel()
-	default:
-		return NewMainModel()
-	}
+func (m *Router) setModel(view string) {
+	m.Model = m.Views[view]
 }
