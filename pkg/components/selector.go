@@ -1,4 +1,4 @@
-package app
+package components
 
 import (
 	"fmt"
@@ -6,20 +6,22 @@ import (
 
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/harrisoncramer/joke-gpt/pkg/logger"
+	"github.com/harrisoncramer/joke-gpt/shared"
 )
 
-type Option struct {
+type SelectorOption struct {
 	Label string `json:"label"`
 	Value string `json:"value"`
 }
 
-type Options []Option
+type SelectorOptions []SelectorOption
 
-func (o Options) Filter(search string) []Option {
+func (o SelectorOptions) Filter(search string) []SelectorOption {
 	if search == "" {
 		return o
 	}
-	var results []Option
+	var results []SelectorOption
 	for _, opt := range o {
 		if strings.Contains(strings.ToLower(opt.Label), strings.ToLower(search)) {
 			results = append(results, opt)
@@ -34,9 +36,11 @@ type Selector interface {
 
 type SelectorModel struct {
 	cursor         int
-	options        Options
-	visibleOptions Options
+	cursorIcon     string
+	options        SelectorOptions
+	visibleOptions SelectorOptions
 	filter         textinput.Model
+	keys           shared.KeyOpts
 }
 
 type Direction string
@@ -46,37 +50,25 @@ const (
 	Down Direction = "down"
 )
 
-type moveMsg struct {
-	direction Direction
-}
-
-type selectMsg struct {
-	option Option
-}
-
-type optionsMsg struct {
-	options Options
-}
-
 type FilterOpts struct {
-	placeholder string
-	hidden      bool
+	Placeholder string
+	Hidden      bool
 }
 
 type NewSelectorModelOpts struct {
-	filter  FilterOpts
-	options []Option
+	Filter  FilterOpts
+	Options []SelectorOption
 }
 
 func NewSelectorModel(opts NewSelectorModelOpts) SelectorModel {
 	m := SelectorModel{
-		options:        opts.options,
-		visibleOptions: opts.options,
+		options:        opts.Options,
+		visibleOptions: opts.Options,
 	}
 
-	if !opts.filter.hidden {
+	if !opts.Filter.Hidden {
 		ti := textinput.New()
-		ti.Placeholder = opts.filter.placeholder
+		ti.Placeholder = opts.Filter.Placeholder
 		m.filter = ti
 	}
 
@@ -87,10 +79,15 @@ func (m SelectorModel) Init() tea.Cmd {
 	return nil
 }
 
-/* Responds to keypresses that are defined in our plugin options and updates the model, and/or selects a value */
+/* This tea.Msg can be used to set options in a selector */
+type SelectorOptionsMsg struct {
+	options SelectorOptions
+}
+
+/* Responds to keypresses and events, and/or selects a value */
 func (m SelectorModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmds []tea.Cmd
-	debugMsg(m, msg)
+	logger.DebugMsg(m, msg)
 
 	/* Handle our filtering */
 	var cmd tea.Cmd
@@ -98,20 +95,20 @@ func (m SelectorModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	cmds = append(cmds, cmd)
 
 	switch msg := msg.(type) {
-	case optionsMsg:
+	case SelectorOptionsMsg:
 		m.setOptions(msg.options)
 	case tea.KeyMsg:
 		switch msg.String() {
-		case PluginOptions.Keys.Down:
+		case shared.PluginOptions.Keys.Down:
 			m.move(Down)
-		case PluginOptions.Keys.Up:
+		case shared.PluginOptions.Keys.Up:
 			m.move(Up)
-		case PluginOptions.Keys.Select:
+		case shared.PluginOptions.Keys.Select:
 			return m, m.selectVal
-		case PluginOptions.Keys.Filter:
+		case shared.PluginOptions.Keys.Filter:
 			cmds = append(cmds, textinput.Blink)
 			m.filter.Focus()
-		case PluginOptions.Keys.Back:
+		case shared.PluginOptions.Keys.Back:
 			if len(m.visibleOptions) > 0 {
 				m.filter.Blur()
 			}
@@ -132,9 +129,9 @@ func (m SelectorModel) View() string {
 	} else {
 		for i, option := range m.visibleOptions {
 			if i == m.cursor {
-				base += fmt.Sprintf("%s %s\n", PluginOptions.Display.Cursor, option.Label)
+				base += fmt.Sprintf("%s %s\n", shared.PluginOptions.Display.Cursor, option.Label)
 			} else {
-				base += fmt.Sprintf("%s %s\n", strings.Repeat(" ", len(PluginOptions.Display.Cursor)), option.Label)
+				base += fmt.Sprintf("%s %s\n", strings.Repeat(" ", len(m.cursorIcon)), option.Label)
 			}
 		}
 	}
@@ -155,11 +152,15 @@ func (m *SelectorModel) move(direction Direction) {
 }
 
 /* Sets options on the selector */
-func (m *SelectorModel) setOptions(options []Option) {
+func (m *SelectorModel) setOptions(options []SelectorOption) {
 	m.options = options
+}
+
+type SelectMsg struct {
+	Option SelectorOption
 }
 
 /* Chooses the value at the given index */
 func (s SelectorModel) selectVal() tea.Msg {
-	return selectMsg{s.options[s.cursor]}
+	return SelectMsg{s.options[s.cursor]}
 }

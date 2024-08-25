@@ -9,6 +9,7 @@ import (
 	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/harrisoncramer/joke-gpt/shared"
 )
 
 type ChatRequest struct {
@@ -50,7 +51,7 @@ func getJoke() tea.Msg {
 	}
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(payloadBytes))
-	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", PluginOptions.Token))
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", shared.PluginOptions.Token))
 	req.Header.Set("Content-Type", "application/json")
 
 	if err != nil {
@@ -58,7 +59,7 @@ func getJoke() tea.Msg {
 	}
 
 	client := &http.Client{
-		Timeout: time.Duration(PluginOptions.Network.Timeout) * time.Millisecond,
+		Timeout: time.Duration(shared.PluginOptions.Network.Timeout) * time.Millisecond,
 	}
 
 	resp, err := client.Do(req)

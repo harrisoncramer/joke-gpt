@@ -7,7 +7,8 @@ import (
 	"github.com/charmbracelet/bubbles/spinner"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/harrisoncramer/joke-gpt/app/router"
+	"github.com/harrisoncramer/joke-gpt/pkg/logger"
+	"github.com/harrisoncramer/joke-gpt/pkg/router"
 	"github.com/harrisoncramer/joke-gpt/shared"
 )
 
@@ -38,7 +39,7 @@ func (m JokeModel) Init() tea.Cmd {
 }
 
 func (m JokeModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	debugMsg(m, msg)
+	logger.DebugMsg(m, msg)
 	if m.err != nil {
 		return m, tea.Quit
 	}
@@ -59,10 +60,10 @@ func (m JokeModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		cmds = append(cmds, getJoke)
 	case tea.KeyMsg:
 		switch msg.String() {
-		case PluginOptions.Keys.Repeat:
+		case shared.PluginOptions.Keys.Repeat:
 			m.joke = ""
 			cmds = append(cmds, getJoke)
-		case PluginOptions.Keys.Back:
+		case shared.PluginOptions.Keys.Back:
 			return m, router.ChangeView(shared.RootView)
 		}
 	}

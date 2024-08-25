@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 
-	app "github.com/harrisoncramer/joke-gpt/app"
 	"github.com/harrisoncramer/joke-gpt/shared"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -52,6 +51,6 @@ func initializeConfig(cmd *cobra.Command) error {
 		return errors.New("ChatGPT API Key is required!\n")
 	}
 
-	app.PluginOptions = p
+	shared.PluginOptions = p
 	return nil
 }

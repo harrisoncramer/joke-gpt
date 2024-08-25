@@ -2,6 +2,7 @@ package app
 
 import (
 	"github.com/charmbracelet/bubbles/key"
+	"github.com/harrisoncramer/joke-gpt/shared"
 )
 
 type keyMap struct {
@@ -18,36 +19,36 @@ type keyMap struct {
 func newKeys() keyMap {
 	k := keyMap{
 		Quit: key.NewBinding(
-			key.WithKeys(PluginOptions.Keys.Quit),
-			key.WithHelp(PluginOptions.Keys.Quit, "quit"),
+			key.WithKeys(shared.PluginOptions.Keys.Quit),
+			key.WithHelp(shared.PluginOptions.Keys.Quit, "quit"),
 		),
 		Select: key.NewBinding(
-			key.WithKeys(PluginOptions.Keys.Select),
-			key.WithHelp(PluginOptions.Keys.Select, "select"),
+			key.WithKeys(shared.PluginOptions.Keys.Select),
+			key.WithHelp(shared.PluginOptions.Keys.Select, "select"),
 		),
 		Up: key.NewBinding(
-			key.WithKeys(PluginOptions.Keys.Up),
-			key.WithHelp(PluginOptions.Keys.Up, "up"),
+			key.WithKeys(shared.PluginOptions.Keys.Up),
+			key.WithHelp(shared.PluginOptions.Keys.Up, "up"),
 		),
 		Down: key.NewBinding(
-			key.WithKeys(PluginOptions.Keys.Down),
-			key.WithHelp(PluginOptions.Keys.Down, "down"),
+			key.WithKeys(shared.PluginOptions.Keys.Down),
+			key.WithHelp(shared.PluginOptions.Keys.Down, "down"),
 		),
 		Repeat: key.NewBinding(
-			key.WithKeys(PluginOptions.Keys.Repeat),
-			key.WithHelp(PluginOptions.Keys.Repeat, "repeat"),
+			key.WithKeys(shared.PluginOptions.Keys.Repeat),
+			key.WithHelp(shared.PluginOptions.Keys.Repeat, "repeat"),
 		),
 		Back: key.NewBinding(
-			key.WithKeys(PluginOptions.Keys.Back),
-			key.WithHelp(PluginOptions.Keys.Back, "back"),
+			key.WithKeys(shared.PluginOptions.Keys.Back),
+			key.WithHelp(shared.PluginOptions.Keys.Back, "back"),
 		),
 		Filter: key.NewBinding(
-			key.WithKeys(PluginOptions.Keys.Filter),
-			key.WithHelp(PluginOptions.Keys.Filter, "filter"),
+			key.WithKeys(shared.PluginOptions.Keys.Filter),
+			key.WithHelp(shared.PluginOptions.Keys.Filter, "filter"),
 		),
 		Help: key.NewBinding(
-			key.WithKeys(PluginOptions.Keys.Help),
-			key.WithHelp(PluginOptions.Keys.Help, "toggle help"),
+			key.WithKeys(shared.PluginOptions.Keys.Help),
+			key.WithHelp(shared.PluginOptions.Keys.Help, "toggle help"),
 		),
 	}
 

@@ -5,24 +5,26 @@ import (
 
 	help "github.com/charmbracelet/bubbles/help"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/harrisoncramer/joke-gpt/app/router"
+	"github.com/harrisoncramer/joke-gpt/pkg/components"
+	"github.com/harrisoncramer/joke-gpt/pkg/logger"
+	"github.com/harrisoncramer/joke-gpt/pkg/router"
 	"github.com/harrisoncramer/joke-gpt/shared"
 )
 
 type MainModel struct {
 	help     help.Model
-	selector Selector
+	selector components.Selector
 	err      error
 }
 
 func NewMainModel() tea.Model {
-	s := NewSelectorModel(NewSelectorModelOpts{
-		filter: FilterOpts{
-			placeholder: "Search...",
+	s := components.NewSelectorModel(components.NewSelectorModelOpts{
+		Filter: components.FilterOpts{
+			Placeholder: "Search...",
 		},
-		options: []Option{
-			{"Tell Joke", shared.JokeView},
-			{"Quit", "quit"},
+		Options: []components.SelectorOption{
+			{Label: "Tell Joke", Value: shared.JokeView},
+			{Label: "Quit", Value: "quit"},
 		},
 	})
 
@@ -38,7 +40,7 @@ func (m MainModel) Init() tea.Cmd {
 }
 
 func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	debugMsg(m, msg)
+	logger.DebugMsg(m, msg)
 	if m.err != nil {
 		return m, tea.Quit
 	}
@@ -54,14 +56,14 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case errMsg:
 		m.err = msg
-	case selectMsg:
-		if msg.option.Value == "quit" {
+	case components.SelectMsg:
+		if msg.Option.Value == "quit" {
 			return m, tea.Quit
 		}
-		return m, router.ChangeView(msg.option.Value)
+		return m, router.ChangeView(msg.Option.Value)
 	case tea.KeyMsg:
 		switch msg.String() {
-		case PluginOptions.Keys.Help:
+		case shared.PluginOptions.Keys.Help:
 			m.help.ShowAll = !m.help.ShowAll
 		}
 	}

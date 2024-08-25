@@ -9,6 +9,9 @@ type PluginOpts struct {
 	Debug   DebugOpts   `mapstructure:"debug"`
 }
 
+/* Global plugin options shared across models */
+var PluginOptions PluginOpts
+
 type NetworkOpts struct {
 	Timeout int `mapstructure:"timeout"`
 }

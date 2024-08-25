@@ -76,6 +76,5 @@ func ChangeView(view string) tea.Cmd {
 }
 
 func (m *Router) setModel(view string) {
-	m.View()
 	m.Model = m.Views[view]
 }

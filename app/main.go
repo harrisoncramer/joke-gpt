@@ -5,18 +5,15 @@ import (
 	"os"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/harrisoncramer/joke-gpt/app/router"
+	"github.com/harrisoncramer/joke-gpt/pkg/router"
 	"github.com/harrisoncramer/joke-gpt/shared"
 	"github.com/spf13/viper"
 )
 
-/* Global plugin options shared across models */
-var PluginOptions shared.PluginOpts
-
 /* Initializes the root model and starts the TUI application */
 func Start(view string) {
 	if viper.GetBool("debug.messages") {
-		f, err := tea.LogToFile(PluginOptions.Debug.FilePath, "debug")
+		f, err := tea.LogToFile(shared.PluginOptions.Debug.FilePath, "debug")
 		if err != nil {
 			fmt.Printf("Error setting up logging: %v\n", err)
 			os.Exit(1)
@@ -25,7 +22,7 @@ func Start(view string) {
 	}
 
 	m := router.NewRouterModel(router.NewRouterModelOpts{
-		Quit: PluginOptions.Keys.Quit,
+		Quit: shared.PluginOptions.Keys.Quit,
 		Views: map[string]tea.Model{
 			shared.JokeView: NewJokeModel(),
 			shared.RootView: NewMainModel(),
