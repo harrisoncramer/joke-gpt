@@ -21,14 +21,10 @@ type JokeModel struct {
 func NewJokeModel() tea.Model {
 	s := spinner.New()
 	s.Style = lipgloss.NewStyle().Foreground(lipgloss.Color("205"))
-	m := JokeModel{
+	return JokeModel{
 		help:    help.New(),
 		keys:    newKeys(),
 		spinner: s,
-	}
-
-	return Router{
-		Model: m,
 	}
 }
 

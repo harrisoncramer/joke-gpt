@@ -13,6 +13,13 @@ type changeViewMsg struct {
 	view string
 }
 
+func NewRouterModel(view string) tea.Model {
+	m := getModel(view)
+	return Router{
+		Model: m,
+	}
+}
+
 // Update method that handles common keystrokes before delegating to the underlying model
 func (m Router) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	debugMsg(m, msg)
@@ -22,12 +29,7 @@ func (m Router) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	switch msg := msg.(type) {
 	case changeViewMsg:
-		switch msg.view {
-		case shared.JokeView:
-			m.Model = NewJokeModel()
-		case shared.RootView:
-			m.Model = NewMainModel()
-		}
+		m.Model = getModel(msg.view)
 		return m, m.Model.Init()
 	}
 
@@ -58,5 +60,14 @@ func (m *Router) HandleQuit(msg tea.Msg) tea.Cmd {
 func changeView(view string) tea.Cmd {
 	return func() tea.Msg {
 		return changeViewMsg{view: view}
+	}
+}
+
+func getModel(view string) tea.Model {
+	switch view {
+	case shared.JokeView:
+		return NewJokeModel()
+	default:
+		return NewMainModel()
 	}
 }

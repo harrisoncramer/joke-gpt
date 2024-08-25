@@ -23,14 +23,7 @@ func Start(view string) {
 		defer f.Close()
 	}
 
-	var m tea.Model
-	switch view {
-	case shared.JokeView:
-		m = NewJokeModel()
-	default:
-		m = NewMainModel()
-	}
-
+	m := NewRouterModel(view)
 	p := tea.NewProgram(m)
 	if _, err := p.Run(); err != nil {
 		fmt.Printf("Error starting BubbleTea: %v\n", err)

@@ -33,13 +33,9 @@ func NewMainModel() tea.Model {
 	})
 
 	h := help.New()
-	m := MainModel{
+	return MainModel{
 		help:     h,
 		selector: s,
-	}
-
-	return Router{
-		Model: m,
 	}
 }
 
