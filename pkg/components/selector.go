@@ -6,7 +6,7 @@ import (
 
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/harrisoncramer/joke-gpt/pkg/logger"
+	"github.com/harrisoncramer/joke-gpt/internal/logger"
 	"github.com/harrisoncramer/joke-gpt/shared"
 )
 
