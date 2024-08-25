@@ -22,7 +22,6 @@ func NewMainModel() tea.Model {
 		},
 		options: []Option{
 			{"Tell Joke", shared.JokeView},
-			{"Tell A different joke", shared.JokeViewTwo},
 			{"Quit", "quit"},
 		},
 	})
