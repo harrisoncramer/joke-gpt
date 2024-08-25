@@ -15,22 +15,16 @@ type MainModel struct {
 	err      error
 }
 
-var jokeOption = Option{
-	Label: "Tell Joke",
-	Value: shared.JokeView,
-}
-
-var quitOption = Option{
-	Label: "Quit",
-	Value: "quit",
-}
-
 func NewMainModel() tea.Model {
 	s := NewSelectorModel(NewSelectorModelOpts{
 		filter: FilterOpts{
 			placeholder: "Search...",
 		},
-		options: []Option{jokeOption, quitOption},
+		options: []Option{
+			{"Tell Joke", shared.JokeView},
+			{"Tell A different joke", shared.JokeViewTwo},
+			{"Quit", "quit"},
+		},
 	})
 
 	h := help.New()

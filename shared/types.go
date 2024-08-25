@@ -36,5 +36,5 @@ type DebugOpts struct {
 const (
 	RootView    string = "root"
 	JokeView    string = "joke"
-	JokeTwoView string = "joke_2"
+	JokeViewTwo string = "joke_2"
 )
