@@ -57,9 +57,6 @@ func (m MultiChoiceModel) Init() tea.Cmd {
 
 func (m MultiChoiceModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	logger.DebugMsg(m, msg)
-	if m.err != nil {
-		return m, tea.Quit
-	}
 
 	var cmds = []tea.Cmd{}
 
@@ -81,6 +78,7 @@ func (m MultiChoiceModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case errMsg:
 		m.loading = false
 		m.err = msg
+		return m, nil
 	case jokeMsg:
 		m.loading = false
 		m.result = msg.joke
@@ -113,6 +111,10 @@ func (m MultiChoiceModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m MultiChoiceModel) View() string {
+	if m.err != nil {
+		return textDanger.Render(m.err.Error())
+	}
+
 	base := appTitle
 
 	if m.result == "" && m.loading {

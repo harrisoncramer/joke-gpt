@@ -131,7 +131,7 @@ func (m SelectorModel) View() string {
 	} else {
 		for i, option := range m.visibleOptions {
 			if i == m.cursor {
-				base += fmt.Sprintf("%s %s\n", shared.PluginOptions.Display.Cursor, option.Label)
+				base += fmt.Sprintf("%s %s\n", colorActive(shared.PluginOptions.Display.Cursor, !m.filter.Focused()), option.Label)
 			} else {
 				base += fmt.Sprintf("%s  %s\n", strings.Repeat(" ", len(m.cursorIcon)), option.Label)
 			}

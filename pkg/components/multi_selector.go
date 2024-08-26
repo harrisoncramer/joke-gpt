@@ -112,6 +112,13 @@ func (m MultiSelectorModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, tea.Batch(cmds...)
 }
 
+func colorActive(text string, cond bool) string {
+	if !cond {
+		return text
+	}
+	return textActive.Render(text)
+}
+
 func (m MultiSelectorModel) View() string {
 	selectedIcon := "x"
 	base := ""
@@ -126,7 +133,7 @@ func (m MultiSelectorModel) View() string {
 				icon = " "
 			}
 			if i == m.cursor {
-				base += fmt.Sprintf("%s [%s] %s\n", shared.PluginOptions.Display.Cursor, icon, option.Label)
+				base += fmt.Sprintf("%s [%s] %s\n", colorActive(shared.PluginOptions.Display.Cursor, !m.filter.Focused()), icon, option.Label)
 			} else {
 				base += fmt.Sprintf("%s  [%s] %s\n", strings.Repeat(" ", len(m.cursorIcon)), icon, option.Label)
 			}
