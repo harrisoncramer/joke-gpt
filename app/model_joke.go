@@ -32,9 +32,14 @@ func NewJokeModel() tea.Model {
 
 type tellJokeMsg struct{}
 
+var prompt = Prompt{
+	user:   "Tell me a joke about software. Please make it different from your previous jokes",
+	system: "You are a a wisecracking assistant.",
+}
+
 func (m JokeModel) Init() tea.Cmd {
 	var cmds = []tea.Cmd{}
-	cmds = append(cmds, getJoke, m.spinner.Tick)
+	cmds = append(cmds, runPrompt(prompt), m.spinner.Tick)
 	return tea.Batch(cmds...)
 }
 
@@ -55,12 +60,12 @@ func (m JokeModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case jokeMsg:
 		m.joke = msg.joke
 	case tellJokeMsg:
-		cmds = append(cmds, getJoke)
+		cmds = append(cmds, runPrompt(prompt))
 	case tea.KeyMsg:
 		switch msg.String() {
 		case shared.PluginOptions.Keys.Repeat:
 			m.joke = ""
-			cmds = append(cmds, getJoke)
+			cmds = append(cmds, runPrompt(prompt))
 		case shared.PluginOptions.Keys.Back:
 			return m, router.Back()
 		}

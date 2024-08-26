@@ -90,7 +90,17 @@ func (m MultiChoiceModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case components.SelectMsg:
 		if len(m.jokes) > 0 {
 			m.loading = true
-			cmds = append(cmds, getJokes(m.jokes, msg.Option.Value), m.spinner.Tick)
+
+			user := "Tell me one joke about each of the following subjects: "
+			for _, joke := range m.jokes {
+				user += fmt.Sprintf("%s,", joke.Value)
+			}
+
+			system := fmt.Sprintf("You are a a wisecracking assistant with a voice in the style of %s.", msg.Option.Value)
+			cmds = append(cmds, runPrompt(Prompt{
+				user:   user,
+				system: system,
+			}), m.spinner.Tick)
 		}
 	case tea.KeyMsg:
 		switch msg.String() {
