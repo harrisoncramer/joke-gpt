@@ -6,6 +6,7 @@ import (
 
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/harrisoncramer/joke-gpt/pkg/router"
 	"github.com/harrisoncramer/joke-gpt/shared"
 )
 
@@ -103,8 +104,11 @@ func (m SelectorModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			cmds = append(cmds, textinput.Blink)
 			m.filter.Focus()
 		case shared.PluginOptions.Keys.Back:
-			if len(m.visibleOptions) > 0 {
+			if m.filter.Focused() {
 				m.filter.Blur()
+				return m, nil
+			} else {
+				return m, router.Back()
 			}
 		}
 	}
