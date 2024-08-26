@@ -40,9 +40,6 @@ func (m JokeModel) Init() tea.Cmd {
 
 func (m JokeModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	logger.DebugMsg(m, msg)
-	if m.err != nil {
-		return m, tea.Quit
-	}
 
 	cmds := []tea.Cmd{}
 
