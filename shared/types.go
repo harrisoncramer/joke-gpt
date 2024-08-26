@@ -20,6 +20,7 @@ type KeyOpts struct {
 	Up     string `mapstructure:"up"`
 	Down   string `mapstructure:"down"`
 	Select string `mapstructure:"select"`
+	Toggle string `mapstructure:"toggle"`
 	Back   string `mapstructure:"back"`
 	Quit   string `mapstructure:"quit"`
 	Repeat string `mapstructure:"repeat"`
@@ -37,6 +38,7 @@ type DebugOpts struct {
 }
 
 const (
-	RootView string = "root"
-	JokeView string = "joke"
+	RootView  string = "root"
+	JokeView  string = "joke"
+	MultiView string = "multi"
 )

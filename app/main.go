@@ -24,8 +24,9 @@ func Start(view string) {
 	m := router.NewRouterModel(router.NewRouterModelOpts{
 		Quit: shared.PluginOptions.Keys.Quit,
 		Views: map[string]tea.Model{
-			shared.JokeView: NewJokeModel(),
-			shared.RootView: NewMainModel(),
+			shared.JokeView:  NewJokeModel(),
+			shared.RootView:  NewMainModel(),
+			shared.MultiView: NewMultiChoiceModel(),
 		},
 		View: view,
 	})

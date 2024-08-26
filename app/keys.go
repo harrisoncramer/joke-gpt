@@ -9,6 +9,7 @@ type keyMap struct {
 	Quit   key.Binding
 	Back   key.Binding
 	Select key.Binding
+	Toggle key.Binding
 	Up     key.Binding
 	Down   key.Binding
 	Repeat key.Binding
@@ -25,6 +26,10 @@ func newKeys() keyMap {
 		Select: key.NewBinding(
 			key.WithKeys(shared.PluginOptions.Keys.Select),
 			key.WithHelp(shared.PluginOptions.Keys.Select, "select"),
+		),
+		Toggle: key.NewBinding(
+			key.WithKeys(shared.PluginOptions.Keys.Toggle),
+			key.WithHelp(shared.PluginOptions.Keys.Toggle, "toggle"),
 		),
 		Up: key.NewBinding(
 			key.WithKeys(shared.PluginOptions.Keys.Up),
@@ -63,6 +68,7 @@ func (k keyMap) FullHelp() [][]key.Binding {
 			k.Back,
 			k.Quit,
 			k.Select,
+			k.Toggle,
 			k.Up,
 			k.Down,
 			k.Repeat,

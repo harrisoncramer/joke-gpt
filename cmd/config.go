@@ -20,6 +20,7 @@ func initializeConfig(cmd *cobra.Command) error {
 	viper.SetDefault("keys.up", "k")
 	viper.SetDefault("keys.down", "j")
 	viper.SetDefault("keys.select", "enter")
+	viper.SetDefault("keys.toggle", "t")
 	viper.SetDefault("keys.quit", "ctrl+c")
 	viper.SetDefault("keys.back", "esc")
 	viper.SetDefault("keys.filter", "/")

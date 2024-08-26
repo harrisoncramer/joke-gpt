@@ -64,7 +64,7 @@ func (m JokeModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.joke = ""
 			cmds = append(cmds, getJoke)
 		case shared.PluginOptions.Keys.Back:
-			return m, router.ChangeView(shared.RootView)
+			return m, router.Back()
 		}
 	}
 
