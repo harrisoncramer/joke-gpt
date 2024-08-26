@@ -63,12 +63,11 @@ func (m MultiSelectorModel) Init() tea.Cmd {
 	}
 }
 
-/* This tea.Msg can be used to set options in a selector */
+/* Message used to set options in a MultiSelectorModel */
 type MultiOptionsMsg struct {
 	options MultiSelectorOptions
 }
 
-/* Responds to keypresses and events, and/or selects a value */
 func (m MultiSelectorModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmds []tea.Cmd
 
@@ -113,7 +112,6 @@ func (m MultiSelectorModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, tea.Batch(cmds...)
 }
 
-/* Renders the choices and the current cursor */
 func (m MultiSelectorModel) View() string {
 	selectedIcon := "x"
 	base := ""
@@ -137,6 +135,7 @@ func (m MultiSelectorModel) View() string {
 	return base
 }
 
+/* Indicates whether the multi-selector is in a focused state */
 func (m MultiSelectorModel) Focused() bool {
 	return m.filter.Focused()
 }
@@ -209,5 +208,14 @@ func (m MultiSelectorModel) confirmSelections() tea.Msg {
 	if m.filter.Focused() {
 		return nil
 	}
-	return MultiSelectMsg{m.options.Filter(m.filterBySelected)}
+
+	// TODO: Build "reactive" properties on the model that update with state changes, e.g. selectedOptions
+	// For now we can build these options here, and pass them to the message. In the future these computed
+	// values should be computed off of m.options
+	options := m.options.Filter(m.filterBySelected)
+	if len(options) == 0 {
+		return nil
+	}
+
+	return MultiSelectMsg{options}
 }

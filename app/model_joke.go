@@ -76,7 +76,7 @@ func (m JokeModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m JokeModel) View() string {
 	if m.err != nil {
-		return m.err.Error()
+		return textDanger.Render(m.err.Error())
 	}
 
 	base := appTitle
