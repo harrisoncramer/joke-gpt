@@ -51,6 +51,7 @@ func (m JokeModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case errMsg:
 		m.err = msg
+		return m, nil
 	case jokeMsg:
 		m.joke = msg.joke
 	case tellJokeMsg:

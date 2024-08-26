@@ -16,8 +16,10 @@ type MultiSelectorOption struct {
 	Selected bool   `json:"selected"`
 }
 
+type MultiSelectorOptions []MultiSelectorOption
+
 type MultiSelectMsg struct {
-	Options MultiOptions
+	Options MultiSelectorOptions
 }
 
 type unselectAllMsg struct{}
@@ -26,13 +28,11 @@ type filterOptions struct {
 	search string
 }
 
-type MultiOptions []MultiSelectorOption
-
 type MultiSelectorModel struct {
 	cursor         int
 	cursorIcon     string
-	options        MultiOptions
-	visibleOptions MultiOptions
+	options        MultiSelectorOptions
+	visibleOptions MultiSelectorOptions
 	filter         textinput.Model
 	keys           shared.KeyOpts
 }
@@ -65,7 +65,7 @@ func (m MultiSelectorModel) Init() tea.Cmd {
 
 /* This tea.Msg can be used to set options in a selector */
 type MultiOptionsMsg struct {
-	options MultiOptions
+	options MultiSelectorOptions
 }
 
 /* Responds to keypresses and events, and/or selects a value */
@@ -160,7 +160,7 @@ func (m *MultiSelectorModel) move(direction Direction) {
 type filterFunc func(o MultiSelectorOption) bool
 
 /* Filter returns a subset of the options based on search and their selected status */
-func (o MultiOptions) Filter(fn filterFunc) MultiOptions {
+func (o MultiSelectorOptions) Filter(fn filterFunc) MultiSelectorOptions {
 	var results []MultiSelectorOption
 	for _, opt := range o {
 		if fn(opt) {
