@@ -6,7 +6,6 @@ import (
 	help "github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/spinner"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/lipgloss"
 	"github.com/harrisoncramer/joke-gpt/internal/logger"
 	"github.com/harrisoncramer/joke-gpt/pkg/router"
 	"github.com/harrisoncramer/joke-gpt/shared"
@@ -22,7 +21,7 @@ type JokeModel struct {
 
 func NewJokeModel() tea.Model {
 	s := spinner.New()
-	s.Style = lipgloss.NewStyle().Foreground(lipgloss.Color("205"))
+	s.Style = textGrey
 	return JokeModel{
 		help:    help.New(),
 		keys:    newKeys(),

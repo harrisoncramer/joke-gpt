@@ -24,6 +24,8 @@ type MultiChoiceModel struct {
 }
 
 func NewMultiChoiceModel() tea.Model {
+	s := spinner.New()
+	s.Style = textGrey
 	return MultiChoiceModel{
 		help:         help.New(),
 		choosingJoke: true,
@@ -45,7 +47,7 @@ func NewMultiChoiceModel() tea.Model {
 				{Label: "Futuristic", Value: "a robot from the future"},
 			},
 		}),
-		spinner: spinner.New(),
+		spinner: s,
 	}
 }
 
@@ -119,9 +121,11 @@ func (m MultiChoiceModel) View() string {
 
 	if m.result == "" && m.loading {
 		base += fmt.Sprintf("\n%s", m.spinner.View())
+		base += fmt.Sprintf("\n\n%s", m.help.View(newKeys()))
 		return base
 	} else if m.result != "" {
 		base += fmt.Sprintf("\n%s", m.result)
+		base += fmt.Sprintf("\n\n%s", m.help.View(newKeys()))
 		return base
 	}
 
