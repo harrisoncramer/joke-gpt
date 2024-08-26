@@ -79,8 +79,7 @@ func (m JokeModel) View() string {
 		return m.err.Error()
 	}
 
-	base := "GPT Joke - Joke View\n"
-
+	base := appTitle
 	if m.joke == "" {
 		base += fmt.Sprintf("\n%s", m.spinner.View())
 	} else {

@@ -10,6 +10,8 @@ import (
 	"github.com/spf13/viper"
 )
 
+var appTitle = "GPT Joke 😂\n\n"
+
 /* Initializes the root model and starts the TUI application */
 func Start(view string) {
 	if viper.GetBool("debug.messages") {

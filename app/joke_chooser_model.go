@@ -113,7 +113,7 @@ func (m MultiChoiceModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m MultiChoiceModel) View() string {
-	base := ""
+	base := appTitle
 
 	if m.result == "" && m.loading {
 		base += fmt.Sprintf("\n%s", m.spinner.View())
@@ -124,10 +124,10 @@ func (m MultiChoiceModel) View() string {
 	}
 
 	if m.choosingJoke {
-		base += "Select jokes\n\n"
+		base += "Select jokes:\n"
 		base += m.jokeChooser.View()
 	} else {
-		base += "Select Voice\n\n"
+		base += "Select Voice:\n"
 		base += m.voiceChooser.View()
 	}
 	base += fmt.Sprintf("\n\n%s", m.help.View(newKeys()))

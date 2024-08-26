@@ -23,8 +23,8 @@ func NewMainModel() tea.Model {
 			Placeholder: "Search...",
 		},
 		Options: []components.SelectorOption{
-			{Label: "Tell Joke", Value: shared.JokeView},
-			{Label: "Multi-View", Value: shared.MultiView},
+			{Label: "Quick Joke", Value: shared.JokeView},
+			{Label: "Custom Joke", Value: shared.MultiView},
 			{Label: "Quit", Value: "quit"},
 		},
 	})
@@ -75,7 +75,7 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m MainModel) View() string {
-	base := "GPT Joke\n\n"
+	base := appTitle
 	base += m.selector.View()
 	base += fmt.Sprintf("\n\n%s", m.help.View(newKeys()))
 	return base
