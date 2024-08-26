@@ -6,7 +6,6 @@ import (
 
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/harrisoncramer/joke-gpt/internal/logger"
 	"github.com/harrisoncramer/joke-gpt/shared"
 )
 
@@ -28,10 +27,6 @@ func (o SelectorOptions) Filter(search string) []SelectorOption {
 		}
 	}
 	return results
-}
-
-type Selector interface {
-	tea.Model
 }
 
 type SelectorModel struct {
@@ -87,7 +82,6 @@ type SelectorOptionsMsg struct {
 /* Responds to keypresses and events, and/or selects a value */
 func (m SelectorModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmds []tea.Cmd
-	logger.DebugMsg(m, msg)
 
 	/* Handle our filtering */
 	var cmd tea.Cmd
@@ -115,6 +109,10 @@ func (m SelectorModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	}
 
+	if m.filter.Focused() {
+		m.cursor = 0
+	}
+
 	m.visibleOptions = m.options.Filter(m.filter.Value())
 	return m, tea.Batch(cmds...)
 }
@@ -131,7 +129,7 @@ func (m SelectorModel) View() string {
 			if i == m.cursor {
 				base += fmt.Sprintf("%s %s\n", shared.PluginOptions.Display.Cursor, option.Label)
 			} else {
-				base += fmt.Sprintf("%s %s\n", strings.Repeat(" ", len(m.cursorIcon)), option.Label)
+				base += fmt.Sprintf("%s  %s\n", strings.Repeat(" ", len(m.cursorIcon)), option.Label)
 			}
 		}
 	}
